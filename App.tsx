@@ -1,8 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
-import HelloWorld from './HelloWorld';
 import HelloWorldInput from './HelloWorldInput';
+import JsonListPressable from './JsonListPressable';
 
 
 export default function App() {
@@ -22,8 +22,8 @@ export default function App() {
       <StatusBar style="auto" />
       </View>
       <View style={styles.centerx}>
-        <HelloWorld/>
-     
+        {/* <HelloWorld/> */}
+     <JsonListPressable/>
       </View>
 
       <View style={styles.lowerx}>
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
   },
 
    lowerx:{
-        flex:4,
+        flex:2,
         color:'blue',
         alignItems:'center',
         justifyContent:'center',
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
        
     },
     centerx:{
-        flex:1,
+        flex:2,
         backgroundColor:'yellow',
         color:'blue',
         alignItems:'center',
