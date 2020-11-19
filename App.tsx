@@ -3,6 +3,7 @@ import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import HelloWorldInput from './HelloWorldInput';
 import JsonListPressable from './JsonListPressable';
+import YLETekstiTv from './YLETekstiTv';
 
 
 export default function App() {
@@ -27,7 +28,9 @@ export default function App() {
       </View>
 
       <View style={styles.lowerx}>
-      <HelloWorldInput/>
+      <YLETekstiTv/>
+
+      {/* <HelloWorldInput/> */}
       </View>
     </View>
   );
@@ -42,7 +45,7 @@ const styles = StyleSheet.create({
   },
 
    lowerx:{
-        flex:2,
+        flex:4,
         color:'blue',
         alignItems:'center',
         justifyContent:'center',
@@ -51,7 +54,7 @@ const styles = StyleSheet.create({
        
     },
     centerx:{
-        flex:2,
+        flex:1,
         backgroundColor:'yellow',
         color:'blue',
         alignItems:'center',
