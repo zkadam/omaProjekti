@@ -8,9 +8,13 @@ export default function HelloWorldInput() {
   const [counter,setCounter] =useState(0);
   const [name,setName] =useState('');
   const[outputName,changeOutputName]=useState('');
+
+  //esitellään array,johon nimet tallennetan
+  const [array, setArray]=useState<string[]>([]);
 //funktio jota button kutsuu
 const showName=(name:string)=>{
     changeOutputName(name);
+    setArray(array=>[...array, '\n' + name]);
 }
 
   setTimeout(
@@ -28,7 +32,7 @@ const showName=(name:string)=>{
         <View>
             <Text>Anna Nimi:</Text>
             <TextInput
-                style={{height:40, borderColor:'gray',borderWidth:1,margin:2}}
+                style={{height:40, borderColor:'gray',backgroundColor:'white',borderWidth:1,margin:2, padding:4}}
                 onChangeText={text=>setName(text)}
                 value={name}
             />
@@ -36,7 +40,9 @@ const showName=(name:string)=>{
                 title="Tallenna nimi"
                 onPress={()=>showName(name)}
             />
-            <Text>{outputName}</Text>
+          
+            <Text style={{fontSize:24}}>{array}</Text>
+
         </View>
     </View>
   );

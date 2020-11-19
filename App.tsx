@@ -1,24 +1,33 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
 import HelloWorld from './HelloWorld';
 import HelloWorldInput from './HelloWorldInput';
-import HelloWorldInpiut from './HelloWorldInput';
 
 
 export default function App() {
   return (
     <View style={styles.container}>
       <View style={styles.upperx}>
+        {/* //kuva sivulle */}
+       <View style={{alignItems:'center'}}>
+        <Image
+          style={styles.logoCareeria}
+          source={{
+            uri: 'https://careeria.fi/static/careeria/careeria_logo_alpha_230x67_once.gif',
+        }} />
+       </View>
+       
       <Text>Tämä on minun eka react native softa</Text>
       <StatusBar style="auto" />
       </View>
       <View style={styles.centerx}>
-      <HelloWorldInput/>
+        <HelloWorld/>
      
       </View>
+
       <View style={styles.lowerx}>
-        <HelloWorld/>
+      <HelloWorldInput/>
       </View>
     </View>
   );
@@ -33,7 +42,7 @@ const styles = StyleSheet.create({
   },
 
    lowerx:{
-        flex:3,
+        flex:4,
         color:'blue',
         alignItems:'center',
         justifyContent:'center',
@@ -42,18 +51,24 @@ const styles = StyleSheet.create({
        
     },
     centerx:{
-        flex:2,
+        flex:1,
         backgroundColor:'yellow',
         color:'blue',
         alignItems:'center',
         justifyContent:'center',
-        fontSize:25
+        fontSize:35
     },
     upperx:{
         flex:1,
-        backgroundColor:'red',
+        backgroundColor:'white',
         alignItems:'center',
         justifyContent:'center',
-        fontSize:25
+        fontSize:35
+    },
+    logoCareeria:{
+      width: 230,
+      height:67,
+      margin:12,
+      padding:20
     }
 });
