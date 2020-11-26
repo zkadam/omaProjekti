@@ -45,11 +45,12 @@ export default function YLETekstiTV(){
                     value={inputPage.toString()}                            
                 />
 
-            <View style={{flexDirection:'row',}}>
-                    <View style={{margin:6}}>
+            <View style={{flexDirection:'row', flexWrap:'wrap'}}>
+                    <View style={{margin:6,alignContent:"center", alignSelf:'center'}}>
                         {/* <Button title="<<" onPress={()=>showPage('prev')} > */}
                             <FontAwesome5.Button onPress={()=>showPage('prev')} name={'angle-double-left'} solid />
                          {/* </Button>              */}
+
                                 </View>
                     <View style={{margin:6}}>
                         <Button title="Näytä sivu" onPress={()=>showPage('')}/>
@@ -57,7 +58,7 @@ export default function YLETekstiTV(){
                     <View style={{margin:6,alignContent:"center", alignSelf:'center'}}>
                         <Text style={{alignSelf:'center',textAlign: 'center'}}>
 
-                    <FontAwesome5.Button onPress={()=>showPage('next')} style={{alignSelf:'center'}} name={'angle-double-right'} solid />
+                    <FontAwesome5.Button onPress={()=>showPage('next')}  style={{alignSelf:'center'}} name={'angle-double-right'} solid />
 
                         </Text>
 

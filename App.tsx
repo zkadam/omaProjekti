@@ -5,6 +5,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { FontAwesome5 } from '@expo/vector-icons'; //vector-icons tuodaan näin
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image } from 'react-native';
+import { Octicons } from '@expo/vector-icons'; 
 
 //Omat sovellukset alkaa tästä
 import HelloWorld from './HelloWorld';
@@ -18,13 +19,14 @@ export default function App() {
       //Muuttujien esittely:
       const Tab = createMaterialTopTabNavigator(); //Swipe navi -muuttuja
       const iconSize = 22; //Määritellään ylänavin iconien koko
-      
+      const tintColor = 'red'; //Määritellään ylänavin iconien koko
   
   return (
     <NavigationContainer>
         {/* SWIPE -NÄKYMÄ: https://reactnavigation.org/docs/material-top-tab-navigator/ */}
         <Tab.Navigator
             tabBarOptions={{
+              
                 activeTintColor: '#ffffff', //Aktiivisen 'linkin' väri
                 inactiveTintColor: '#000000',//Inaktiivisen 'linkin' väri
                 showLabel: false, //Näytetäänkö navigaatio vai ei
@@ -48,7 +50,7 @@ export default function App() {
             <Tab.Screen name="JsonList" component={JsonList} options={{ tabBarIcon: () => <FontAwesome5 name="chess-bishop" color="#333" size={iconSize} /> }} />
             <Tab.Screen name="JsonListPressable" component={JsonListPressable} options={{ tabBarIcon: () => <FontAwesome5 name="scroll" color="#333" size={iconSize} /> }} />
             <Tab.Screen name="YLETekstiTV100" component={YLETekstiTV100} options={{ tabBarIcon: () => <FontAwesome5 name="database" color="#333" size={iconSize} /> }} />
-            <Tab.Screen  name="YLETekstiTv" component={YLETekstiTv} options={{ tabBarIcon: () => <FontAwesome5 name="newspaper" color="#333" size={iconSize} /> }} />
+            <Tab.Screen  name="YLETekstiTv" component={YLETekstiTv} options={{ tabBarIcon: () =><Octicons name="gear" size={iconSize} color={tintColor} />  }} />
 
         </Tab.Navigator>
     </NavigationContainer>
