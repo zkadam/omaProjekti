@@ -1,9 +1,11 @@
 import React, {useEffect,useState} from 'react';
 import{Text,View,Button,TextInput, ScrollView, Platform,Image,StyleSheet} from 'react-native';
 import {API_id, API_key} from './APIKeyZA';
+import { FontAwesome5 } from '@expo/vector-icons'; //vector-icons tuodaan näin
 
 
 export default function YLETekstiTV(){
+    
     const [imageUrl, setUrl]=useState<string>();
     const[inputPage, changeInputPage]=React.useState(100);
     var url='https://external.api.yle.fi/v1/teletext/images/' + inputPage + '/1.png?app_id=' + API_id + '&app_key=' + API_key+ "&date="+Date.now.toString();
@@ -45,13 +47,20 @@ export default function YLETekstiTV(){
 
             <View style={{flexDirection:'row',}}>
                     <View style={{margin:6}}>
-                        <Button title="<<" onPress={()=>showPage('prev')}/>
-                    </View>
+                        {/* <Button title="<<" onPress={()=>showPage('prev')} > */}
+                            <FontAwesome5.Button onPress={()=>showPage('prev')} name={'angle-double-left'} solid />
+                         {/* </Button>              */}
+                                </View>
                     <View style={{margin:6}}>
                         <Button title="Näytä sivu" onPress={()=>showPage('')}/>
                     </View>
-                    <View style={{margin:6}}>
-                        <Button title=">>" onPress={()=>showPage('next')}/>
+                    <View style={{margin:6,alignContent:"center", alignSelf:'center'}}>
+                        <Text style={{alignSelf:'center',textAlign: 'center'}}>
+
+                    <FontAwesome5.Button onPress={()=>showPage('next')} style={{alignSelf:'center'}} name={'angle-double-right'} solid />
+
+                        </Text>
+
                     </View>
 
             </View>
