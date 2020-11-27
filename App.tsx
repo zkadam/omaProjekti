@@ -14,6 +14,7 @@ import JsonList from './JsonList';
 import JsonListPressable from './JsonListPressable';
 import YLETekstiTV100 from './YLETekstiTV100';
 import YLETekstiTv from './YLETekstiTv';
+import NwTuotteetListPop from './NwTuotteet/NwTuotteetListPop';
 
 export default function App() {
       //Muuttujien esittely:
@@ -51,6 +52,7 @@ export default function App() {
             <Tab.Screen name="JsonListPressable" component={JsonListPressable} options={{ tabBarIcon: () => <FontAwesome5 name="scroll" color="#333" size={iconSize} /> }} />
             <Tab.Screen name="YLETekstiTV100" component={YLETekstiTV100} options={{ tabBarIcon: () => <FontAwesome5 name="database" color="#333" size={iconSize} /> }} />
             <Tab.Screen  name="YLETekstiTv" component={YLETekstiTv} options={{ tabBarIcon: () =><Octicons name="gear" size={iconSize} color={tintColor} />  }} />
+            <Tab.Screen  name="NwTuotteet" component={NwTuotteetListPop} options={{ tabBarIcon: () =><Octicons name="gear" size={iconSize} color={tintColor} />  }} />
 
         </Tab.Navigator>
     </NavigationContainer>
