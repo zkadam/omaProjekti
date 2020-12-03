@@ -33,26 +33,26 @@ export default function App() {
                 showLabel: false, //Näytetäänkö navigaatio vai ei
                 labelStyle: { fontSize: 10 }, //stylemääritykset tähän
                 showIcon: true, //Ikonin näyttö, jos sellainen määritelty
-                //scrollEnabled: true, //Whether the tab column can be scrolled (when the total number of tabs exceeds one screen)
-                indicatorStyle: { height: 1 }, //Indicator style height: 0 is not displayed
-                style: { backgroundColor: '#31b3c0', paddingTop: 40, }, //Set the entire tabbar style (background color, etc.)
+               scrollEnabled: false, //Whether the tab column can be scrolled (when the total number of tabs exceeds one screen)
+                indicatorStyle: { height: 4 }, //Indicator style height: 0 is not displayed
+                style: { backgroundColor: '#31b3c0', paddingTop: 20, alignItems:"stretch", justifyContent:"center"}, //Set the entire tabbar style (background color, etc.)
             }}
         >
             {/* Perustilanne ilman ikoneita */}
             {/* <Tab.Screen name="HelloWorld" component={HelloWorld} />
             <Tab.Screen name="HelloWorldInput" component={HelloWorldInput} />
             <Tab.Screen name="JsonList" component={JsonList} />
-            <Tab.Screen name="JsonListPressable" component={JsonListPressable} />
+            <Tab.Screen name="JsonListPressable" component={JsonListPressable} />style={({ pressed }) => [{ backgroundColor: pressed ? 'lightgray' : 'white' }]}
             <Tab.Screen name="YLETekstiTV100" component={YLETekstiTV100} />
             <Tab.Screen name="YLETekstiTv" component={YLETekstiTv} /> */}
 
-            <Tab.Screen name="HelloWorld" component={HelloWorld} options={{ tabBarIcon: () => <FontAwesome5 name="chess-pawn" color={"#333"} size={iconSize} /> }} />
-            <Tab.Screen name="HelloWorldInput" component={HelloWorldInput} options={{ tabBarIcon: () => <FontAwesome5 name="chess-knight" color="#333" size={iconSize} /> }} />
-            <Tab.Screen name="JsonList" component={JsonList} options={{ tabBarIcon: () => <FontAwesome5 name="chess-bishop" color="#333" size={iconSize} /> }} />
-            <Tab.Screen name="JsonListPressable" component={JsonListPressable} options={{ tabBarIcon: () => <FontAwesome5 name="scroll" color="#333" size={iconSize} /> }} />
-            <Tab.Screen name="YLETekstiTV100" component={YLETekstiTV100} options={{ tabBarIcon: () => <FontAwesome5 name="database" color="#333" size={iconSize} /> }} />
-            <Tab.Screen  name="YLETekstiTv" component={YLETekstiTv} options={{ tabBarIcon: () =><Octicons name="gear" size={iconSize} color={tintColor} />  }} />
-            <Tab.Screen  name="NwTuotteet" component={NwTuotteetListPop} options={{ tabBarIcon: () =><Octicons name="gear" size={iconSize} color={tintColor} />  }} />
+            <Tab.Screen name="HelloWorld" component={HelloWorld} options={{ tabBarIcon: ({ color , focused}) => <FontAwesome5 name="chess-pawn" color={color} size={(focused? iconSize+5 : iconSize)} /> }} />
+            <Tab.Screen name="HelloWorldInput" component={HelloWorldInput} options={{ tabBarIcon: ({ color , focused}) => <FontAwesome5 name="chess-knight" color={color} size={(focused? iconSize+5 : iconSize)} /> }} />
+            <Tab.Screen name="JsonList" component={JsonList} options={{ tabBarIcon: ({ color , focused}) => <FontAwesome5 name="chess-bishop" color={color} size={(focused? iconSize+5 : iconSize)} /> }} />
+            <Tab.Screen name="JsonListPressable" component={JsonListPressable} options={{ tabBarIcon: ({ color , focused}) => <FontAwesome5 name="scroll" color={color} size={(focused? iconSize+5 : iconSize)} /> }} />
+            <Tab.Screen name="YLETekstiTV100" component={YLETekstiTV100} options={{ tabBarIcon: ({ color , focused}) => <FontAwesome5 name="database" color={color} size={(focused? iconSize+5 : iconSize)} /> }} />
+            <Tab.Screen  name="YLETekstiTv" component={YLETekstiTv} options={{ tabBarIcon: ({ color , focused}) =><Octicons name="gear" size={(focused? iconSize+5 : iconSize)} color={color} />  }} />
+            <Tab.Screen  name="NwTuotteet" component={NwTuotteetListPop} options={{ tabBarIcon: ({ color , focused}) =><Octicons name="gear" size={(focused? iconSize+5 : iconSize)} color={color} />  }} />
 
         </Tab.Navigator>
     </NavigationContainer>
