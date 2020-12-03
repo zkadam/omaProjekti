@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React from 'react';
+import React, { useState } from "react";
 import { NavigationContainer } from '@react-navigation/native'; //Navigaatio -komponentin import
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { FontAwesome5 } from '@expo/vector-icons'; //vector-icons tuodaan näin
@@ -17,13 +17,15 @@ import YLETekstiTv from './YLETekstiTv';
 import NwTuotteetListPop from './NwTuotteet/NwTuotteetListPop';
 
 export default function App() {
+  // const [styleStatusBar, setStyleStatusBar] = useState(styleTypes[0]);
       //Muuttujien esittely:
       const Tab = createMaterialTopTabNavigator(); //Swipe navi -muuttuja
       const iconSize = 22; //Määritellään ylänavin iconien koko
       const tintColor = 'red'; //Määritellään ylänavin iconien koko
-  
+      
   return (
-    <NavigationContainer>
+    <NavigationContainer> 
+      <StatusBar style="inverted" translucent={true} animated={true}/>
         {/* SWIPE -NÄKYMÄ: https://reactnavigation.org/docs/material-top-tab-navigator/ */}
         <Tab.Navigator
             tabBarOptions={{
@@ -35,7 +37,7 @@ export default function App() {
                 showIcon: true, //Ikonin näyttö, jos sellainen määritelty
                scrollEnabled: false, //Whether the tab column can be scrolled (when the total number of tabs exceeds one screen)
                 indicatorStyle: { height: 4 }, //Indicator style height: 0 is not displayed
-                style: { backgroundColor: '#31b3c0', paddingTop: 20, alignItems:"stretch", justifyContent:"center"}, //Set the entire tabbar style (background color, etc.)
+                style: { backgroundColor: '#31b3c0',height: 60, alignItems:"stretch", justifyContent:"center"}, //Set the entire tabbar style (background color, etc.)
             }}
         >
             {/* Perustilanne ilman ikoneita */}
