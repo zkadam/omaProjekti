@@ -2,7 +2,7 @@ import 'react-native-gesture-handler';
 import React, { useState } from "react";
 import { NavigationContainer } from '@react-navigation/native'; //Navigaatio -komponentin import
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { FontAwesome5 } from '@expo/vector-icons'; //vector-icons tuodaan näin
+import { FontAwesome5, MaterialIcons } from '@expo/vector-icons'; //vector-icons tuodaan näin
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { Octicons } from '@expo/vector-icons'; 
@@ -15,6 +15,9 @@ import JsonListPressable from './JsonListPressable';
 import YLETekstiTV100 from './YLETekstiTV100';
 import YLETekstiTv from './YLETekstiTv';
 import NwTuotteetListPop from './NwTuotteet/NwTuotteetListPop';
+import NwTuotteetListModular from './NwTuotteet/NwTuotteetListModular';
+
+
 
 export default function App() {
   // const [styleStatusBar, setStyleStatusBar] = useState(styleTypes[0]);
@@ -25,7 +28,8 @@ export default function App() {
       
   return (
     <NavigationContainer> 
-      <StatusBar style="inverted" translucent={false} animated={true}/>
+      <View style={{paddingTop: 25 ,backgroundColor:'#31b3c0'}}></View>
+      <StatusBar style="inverted" translucent={true} animated={true}/>
         {/* SWIPE -NÄKYMÄ: https://reactnavigation.org/docs/material-top-tab-navigator/ */}
         <Tab.Navigator
             tabBarOptions={{
@@ -48,14 +52,17 @@ export default function App() {
             <Tab.Screen name="YLETekstiTV100" component={YLETekstiTV100} />
             <Tab.Screen name="YLETekstiTv" component={YLETekstiTv} /> */}
 
-            <Tab.Screen name="HelloWorld" component={HelloWorld} options={{ tabBarIcon: ({ color , focused}) => <FontAwesome5 name="chess-pawn" color={color} size={(focused? iconSize+5 : iconSize)} /> }} />
-            <Tab.Screen name="HelloWorldInput" component={HelloWorldInput} options={{ tabBarIcon: ({ color , focused}) => <FontAwesome5 name="chess-knight" color={color} size={(focused? iconSize+5 : iconSize)} /> }} />
-            <Tab.Screen name="JsonList" component={JsonList} options={{ tabBarIcon: ({ color , focused}) => <FontAwesome5 name="chess-bishop" color={color} size={(focused? iconSize+5 : iconSize)} /> }} />
+            <Tab.Screen name="HelloWorld" component={HelloWorld} options={{ tabBarIcon: ({ color , focused}) => <MaterialIcons name="home" color={color} size={(focused? iconSize+5 : iconSize)} /> }} />
+            <Tab.Screen name="HelloWorldInput" component={HelloWorldInput} options={{ tabBarIcon: ({ color , focused}) => <MaterialIcons name="list" color={color} size={(focused? iconSize+5 : iconSize)} /> }} />
+            {/* <Tab.Screen name="JsonList" component={JsonList} options={{ tabBarIcon: ({ color , focused}) => <FontAwesome5 name="chess-bishop" color={color} size={(focused? iconSize+5 : iconSize)} /> }} /> */}
             <Tab.Screen name="JsonListPressable" component={JsonListPressable} options={{ tabBarIcon: ({ color , focused}) => <FontAwesome5 name="scroll" color={color} size={(focused? iconSize+5 : iconSize)} /> }} />
-            <Tab.Screen name="YLETekstiTV100" component={YLETekstiTV100} options={{ tabBarIcon: ({ color , focused}) => <FontAwesome5 name="database" color={color} size={(focused? iconSize+5 : iconSize)} /> }} />
-            <Tab.Screen  name="YLETekstiTv" component={YLETekstiTv} options={{ tabBarIcon: ({ color , focused}) =><Octicons name="gear" size={(focused? iconSize+5 : iconSize)} color={color} />  }} />
-            <Tab.Screen  name="NwTuotteet" component={NwTuotteetListPop} options={{ tabBarIcon: ({ color , focused}) =><Octicons name="gear" size={(focused? iconSize+5 : iconSize)} color={color} />  }} />
+            <Tab.Screen name="YLETekstiTV100" component={YLETekstiTV100} options={{ tabBarIcon: ({ color , focused}) => <MaterialIcons name="chrome-reader-mode" color={color} size={(focused? iconSize+5 : iconSize)} /> }} />
+            <Tab.Screen  name="YLETekstiTv" component={YLETekstiTv} options={{ tabBarIcon: ({ color , focused}) =><MaterialIcons name="chrome-reader-mode" size={(focused? iconSize+5 : iconSize)} color={color} />  }} />
+            <Tab.Screen  name="NwTuotteet" component={NwTuotteetListPop} options={{ tabBarIcon: ({ color , focused}) =><FontAwesome5 name="list" size={(focused? iconSize+5 : iconSize)} color={color} />  }} />
+            <Tab.Screen  name="NWTuotteetListModular" component={NwTuotteetListModular} options={{ tabBarIcon: ({ color , focused}) =><FontAwesome5 name="list" size={(focused? iconSize+5 : iconSize)} color={color} />  }} />
 
+        
+            
         </Tab.Navigator>
     </NavigationContainer>
 );
