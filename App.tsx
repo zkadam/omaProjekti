@@ -25,7 +25,7 @@ export default function App() {
       
   return (
     <NavigationContainer> 
-      <StatusBar style="inverted" translucent={true} animated={true}/>
+      <StatusBar style="inverted" translucent={false} animated={true}/>
         {/* SWIPE -NÄKYMÄ: https://reactnavigation.org/docs/material-top-tab-navigator/ */}
         <Tab.Navigator
             tabBarOptions={{
