@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, ScrollView, Image, Pressable, Modal,  ActivityIndicator } from 'react-native';
+import { Text, View, ScrollView, Image, Pressable, Modal,  ActivityIndicator, TouchableOpacity } from 'react-native';
 import { FontAwesome5, Octicons } from '@expo/vector-icons'; //iconit käyttöön!
 import styles from '../styles/styles';
 import ProductDetails from './ProductDetails';
+import EditProduct from './EditProduct';
 
 
 interface INWProductsResponse {
@@ -29,6 +30,9 @@ export default function NWTuotteetListModular() {
     const [productItemsCount, setproductItemsCount] = useState(0);
 
     const [productDetailsModal, setProductDetailsModal] = useState(false);
+    const [productEditModal, setProductEditModal]=useState(false);
+
+
     {/*Tuotelistan päivityksen muuttujat*/ }
     const [refreshProducts, setRefreshProducts] = useState(false);
     const [refreshIndicator, setRefreshIndicator] = useState(false);
@@ -37,9 +41,9 @@ export default function NWTuotteetListModular() {
         GetProducts();
     }, [refreshProducts]);
 
-    function GetProducts() {
+    async function GetProducts() {
         let uri = 'https://webapivscareeria.azurewebsites.net/nw/products/';
-        fetch(uri)
+        await fetch(uri)
             .then(response => response.json())
             .then((json: INWProductsResponse) => {
                 setproductItems(json); //Tuotteet kirjoitetaan productItems -array muuttujaan.
@@ -58,6 +62,18 @@ export default function NWTuotteetListModular() {
     function closeDetailsModal() {
         setProductDetailsModal(!productDetailsModal);
     }
+
+       //Modaali-ikkunan sulkeminen
+       function closeEditModal() {
+        setProductEditModal(!productEditModal);
+    }
+
+    //TUOTTEEN EDITOINTI IKKUNAN KUTSU
+    function editProductFunc(item: INWProductsResponse){
+        setProduct(item);
+        setProductEditModal(true);
+    }
+
 
     return (
         <View style={[styles.mainWrapper]}>
@@ -96,17 +112,24 @@ export default function NWTuotteetListModular() {
                             <View style={{ flexGrow: 1, flexShrink: 1, alignSelf: 'center' }}>
                                 <Text style={{ fontSize: 15 }}>{item.productName}</Text>
                                 <Text style={{ color: '#8f8f8f' }}>{item.category ? 'Variation: ' + item.category : ''}</Text>
-                                <Text style={{ color: '#333333', marginBottom: 10 }}>{'\u00E1 ' + (item.unitPrice == null ? 'unitprice is missing ' : item.unitPrice.toFixed(2)) + '\u20AC'}</Text>
-                            </View>
                             {/*Euro -merkki tulee '\u20AC' käyttämällä...*/}
                             {/*á -merkki tulee '\u00E1' käyttämällä...*/}
-                        </View>
+                                <Text style={{ color: '#333333', marginBottom: 10 }}>{'\u00E1 ' + (item.unitPrice == null ? 'unitprice is missing ' : item.unitPrice.toFixed(2)) + '\u20AC'}</Text>
+                            </View>
 
+            {/*----------------------------------------- EDITING ICON -------------------------------------*/}
+                            <View style={{padding:2, marginRight:10, marginTop: 30}}>
+                                    <TouchableOpacity style={[{width:32, height:32}]} onPress={()=>editProductFunc(item)}>
+                                        <Octicons name="pencil" size={24} color="black"/>                                    
+                                    </TouchableOpacity>
+
+                            </View>
+                        </View>
                     </Pressable>
                 ))}
 
 
-                {/* Details modal komponentin kutsu */}
+                {/* ------------------------------Details modal komponentin kutsu */}
                 {productDetailsModal ? (
                     <Modal
                         style={[styles.modalContainer]}
@@ -115,12 +138,19 @@ export default function NWTuotteetListModular() {
                         visible={true}
                     >
                         <ProductDetails closeModal={closeDetailsModal} passProductId={product.productId}></ProductDetails>
-
-
-
                     </Modal>
+                ) : null}
 
-
+                {/*------------------------------ Edit modal komponentin kutsu */}
+                {productEditModal ? (
+                    <Modal
+                        style={[styles.modalContainer]}
+                        animationType="slide"
+                        transparent={true}
+                        visible={true}
+                    >
+                        <EditProduct closeModal={closeEditModal} rfreshAfterEdit={refreshJsonData} passProductId={product.productId}/>
+                    </Modal>
                 ) : null}
 
             </ScrollView>

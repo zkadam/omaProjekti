@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Text, View, ScrollView, Image, Pressable, Modal, TouchableHighlight, ActivityIndicator } from 'react-native';
 import { FontAwesome5, Octicons } from '@expo/vector-icons'; //iconit käyttöön!
 import styles from '../styles/styles';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 interface INWProductsResponse {
     //Typescript -interface käytetään productItems -muuttujassa json
@@ -64,29 +65,6 @@ export default function NWTuotteetListPop() {
         setRefreshIndicator(true);
     }
 
-  
-
-    //Tuotetietojen näyttäminen
-    // function showDetails(id: number, name: string, suppid: number, catid: number, quantityp: string, price: number, instock: number, onorder: number, reorderlvl: number, disco: boolean, imglnk: string, cat: any, supp: any) {
-    //     //console.log(id + name + suppid + catid + quantityp + price + instock + onorder + reorderlvl + disco + imglnk)
-    //     setProductDetailsModal(true),
-    //     setProductId(id),
-    //     setProductName(name),
-    //     setSupplierId(suppid),
-    //     setCategoryId(catid),
-    //     setQuantityPerUnit(quantityp),
-    //     setUnitPrice(price),
-    //     setUnitsInStock(instock),
-    //     setUnitsOnOrder(onorder),
-    //     setReorderLevel(reorderlvl),
-    //     setDiscontinued(disco)
-    //     if (imglnk !== null) {
-    //         setImageLink(imglnk);
-    //     }
-    //     else {
-    //         setImageLink('');
-    //     }
-    // }
 
     //Modaali-ikkunan sulkeminen
     function closeModal() {
@@ -118,21 +96,7 @@ export default function NWTuotteetListPop() {
                           
                           setProduct(item);
                           setProductDetailsModal(true);
-                            // showDetails(
-                            //     item.productId,
-                            //     item.productName,
-                            //     item.supplierId,
-                            //     item.categoryId,
-                            //     item.quantityPerUnit,
-                            //     item.unitPrice,
-                            //     item.unitsInStock,
-                            //     item.unitsOnOrder,
-                            //     item.reorderLevel,
-                            //     item.discontinued,
-                            //     item.imageLink,
-                            //     item.category,
-                            //     item.supplier
-                            // )
+                           
                         }}
                         style={({ pressed }) => [{ backgroundColor: pressed ? 'rgba(49, 179, 192, 0.5)' : 'white' }]}
                     >
@@ -143,10 +107,13 @@ export default function NWTuotteetListPop() {
                             <View  style={{ flexGrow: 1, flexShrink: 1, alignSelf: 'center' }}>
                                 <Text  style={{ fontSize: 15 }}>{item.productName}</Text>
                                 <Text  style={{ color: '#8f8f8f' }}>{item.category ? 'Variation: ' + item.category : ''}</Text>
-                                <Text  style={{ color: '#333333', marginBottom: 10 }}>{'\u00E1 ' + (item.unitPrice == null ? 'unitprice is missing ' : item.unitPrice.toFixed(2))  + '\u20AC'}</Text>
-                            </View>
                             {/*Euro -merkki tulee '\u20AC' käyttämällä...*/}
                             {/*á -merkki tulee '\u00E1' käyttämällä...*/}
+                                <Text  style={{ color: '#333333', marginBottom: 10 }}>{'\u00E1 ' + (item.unitPrice == null ? 'unitprice is missing ' : item.unitPrice.toFixed(2))  + '\u20AC'}</Text>
+                            </View>
+                           
+                           
+                          
                         </View>
 
                     </Pressable>
