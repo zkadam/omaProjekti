@@ -22,7 +22,8 @@ interface INWProductsResponse {
     supplier: string;
     checked: any;
 }
-    const ProductDetails = (props:{passProductId:any, closeModal:any, refreshAfterEdit:any})=>{
+    const EditProduct = (props:{passProductId:any, closeModal:any, refreshAfterEdit:any})=>{
+        let ProductId=props.passProductId;
         const [ProductName, setProductName] = useState('...');
         const [SupplierId, setSupplierId] = useState('0');
         const [CategoryId, setCategoryId] = useState('0');
@@ -33,20 +34,102 @@ interface INWProductsResponse {
         const [ReorderLevel, setReorderLevel] = useState('0');
         const [Discontinued, setDiscontinued] = useState(false);
         const [ImageLink, setImageLink] = useState('...');
+        let validaatio=true;
+
     useEffect(()=>{
         GetProductData();
         }, [props.passProductId]);  //aina kun product id muuttuu, päivitetään useEffectin
 
     //Tuotetietojen haku id:llä tietokannasta
-    function GetProductData() {
+    async function GetProductData() {
             let uri = 'https://webapivscareeria.azurewebsites.net/nw/products/' + ProductId;
-            fetch(uri)
+            await fetch(uri)
                 .then(response => response.json())
                 .then((json: INWProductsResponse) => {
-                    setProduct(json); //Tuotteet kirjoitetaan productItems -array muuttujaan.
+                    setProductName(json.productName),
+                    setSupplierId(json.supplierId.toString()),
+                    setCategoryId(json.categoryId.toString()),
+                    setQuantityPerUnit(json.quantityPerUnit.toString()),
+                    setUnitPrice(json.unitPrice.toString()),
+                    setUnitsInStock(json.unitsInStock.toString()),
+                    setUnitsOnOrder(json.unitsOnOrder.toString()),
+                    setReorderLevel(json.reorderLevel.toString()),
+                    setDiscontinued(json.discontinued),
+                    setImageLink(json.imageLink);      
                 })
-        }
           
+    }
+
+
+
+    async function editProductOnPress(ProductName: string){
+        if(Platform.OS==='web'){
+            if(validaatio==false){
+                alert('Tuotetta ' + ProductName + ' ei voi tallentaa tietojen puuttellisuuden vuoksi!');
+            }else {
+                await PutToDB();
+                console.log('Tuotetta ' + ProductName + ' muokattu onnistuneesti');
+                props.refreshAfterEdit(true);
+                closeModal();
+            }
+            
+        }
+        else{
+            if(validaatio==false){
+                alert('Tuotetta ' + ProductName + ' ei voi tallentaa tietojen puuttellisuuden vuoksi!');
+            }else {
+                await PutToDB();
+               alert('Tuotetta ' + ProductName + ' muokattu onnistuneesti');
+                props.refreshAfterEdit(true);
+                closeModal();
+            }
+        }
+
+
+    }
+
+    function PutToDB(){
+        const product=
+        {
+            ProductName: ProductName,
+            SupplierId: Number(SupplierId),
+            CategoryId: Number(CategoryId),
+            QuantityPerUnit:QuantityPerUnit,
+            UnitPrice:parseFloat(Number(UnitPrice).toFixed(2)),
+            UnitsInStock:Number(UnitsInStock),
+            UnitsOnOrder:Number(UnitsOnOrder),
+            ReorderLevel:Number(ReorderLevel),
+            Discontinued:Boolean(Discontinued),
+            ImageLink:ImageLink,
+
+        };
+
+        const prodeditJson=JSON.stringify(product); 
+
+        const apiUrl= 'https://webapivscareeria.azurewebsites.net/nw/products/'+ ProductId;
+        fetch(apiUrl, {
+            method:"PUT",
+            headers:{
+                "Accept": "application/json",
+                "Content-Type":"application/json; charset=utf-8"
+            },
+            body:prodeditJson
+        })
+            .then((response)=>response.json())
+            .then((json)=>{
+                const success = json;
+                if(success){
+                    console.log(success)
+                }
+                else{
+                    console.log('error updating ' + ProductName)
+                }
+            })
+
+    }
+
+
+
 
 
     function closeModal(){
@@ -56,70 +139,148 @@ interface INWProductsResponse {
 
 {/* Modal starts here */}
 
-    return(
-        <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-            <Text style={styles.modalTitle}>Tuotteen tiedot- Edit</Text>
-                <View style={styles.modalInfo}>
-                    <Text style={styles.modalTextTitle}>{'Product Id: '}</Text>
-                    <Text style={styles.modalText}>{product.productId}</Text>
+return (
+    <View style={styles.inputContainer}>
+        <ScrollView>
+            <View key={ProductId}>
+                <View style={styles.topSection}>
+                    <Pressable onPress={() => editProductOnPress(ProductName)}>
+                        <View><Octicons name="check" size={24} color="green" /></View> 
+                    </Pressable>
+                
+                    <Pressable onPress={() => closeModal()}>
+                        <View><Octicons name="x" size={24} color="black" /></View>
+                    </Pressable>
                 </View>
-                <View style={styles.modalInfo}>
-                    <Text style={styles.modalTextTitle}>{'Product Name: '}</Text>
-                    <Text style={styles.modalText}>{product.productName}</Text>
+
+                <Text style={styles.inputHeaderTitle}>Tuotteen muokkaus:</Text>
+                <Text style={styles.inputTitle}>ID:</Text>
+                <TextInput style={styles.inputTitle}
+                    underlineColorAndroid="transparent"
+                    defaultValue={ProductId.toString()}
+                    autoCapitalize="none"
+                    editable={false}
+                />
+
+                <Text style={styles.inputTitle}>Nimi:</Text>
+                <TextInput style={styles.editInput} 
+                    underlineColorAndroid="transparent"
+                    onChangeText={val => setProductName(val)}
+                    value={ProductName.toString()}
+                    placeholderTextColor="#9a73ef"
+                    autoCapitalize="none"
+                    selectTextOnFocus={true}
+                    
+                />
+                {/* { ProductName ? null : ( <Text style={styles.validationError}>Anna tuotteen nimi!</Text> )}   */}
+                {/* { validateString(ProductName) == true ? null : ( <Text style={styles.validationError}>Anna tuotteen nimi!</Text> )} */}
+    
+                <Text style={styles.inputTitle}>Hinta:</Text>
+                <TextInput style={styles.editInput}
+                    underlineColorAndroid="transparent"
+                    onChangeText={val => setUnitPrice(val)}
+                    value={(UnitPrice.toString() == null ? '0' : UnitPrice.toString())}
+                    placeholderTextColor="#9a73ef"
+                    autoCapitalize="none"
+                    keyboardType='numeric'
+                    selectTextOnFocus={true}
+                />
+                {/* { priceValidation(UnitPrice, 'UnitPrice') == true ? null : ( <Text style={styles.validationError}>Anna hinta muodossa n.zz!</Text> )} */}
+                {/* { validatePrice(UnitPrice) == true ? null : ( <Text style={styles.validationError}>Anna hinta muodossa n.zz!</Text> )} */}
+
+                <Text style={styles.inputTitle}>Varastossa:</Text>
+                <TextInput style={styles.editInput}
+                    underlineColorAndroid="transparent"
+                    onChangeText={val => setUnitsInStock((val))}
+                    value={UnitsInStock.toString()}
+                    placeholderTextColor="#9a73ef"
+                    autoCapitalize="none"
+                    keyboardType='numeric'
+                    selectTextOnFocus={true}
+                />
+                {/* { validateNumeric(UnitsInStock) == true ? null : ( <Text style={styles.validationError}>Anna varastomääräksi numero</Text> )} */}
+
+                <Text style={styles.inputTitle}>Hälytysraja:</Text>
+                <TextInput style={styles.editInput}
+                    underlineColorAndroid="transparent"
+                    onChangeText={val => setReorderLevel(val)}
+                    value={ReorderLevel.toString()}
+                    placeholderTextColor="#9a73ef"
+                    autoCapitalize="none"
+                    keyboardType='numeric'
+                    selectTextOnFocus={true}
+                />
+
+                <Text style={styles.inputTitle}>Tilauksessa:</Text>
+                <TextInput style={styles.editInput}
+                    underlineColorAndroid="transparent"
+                    onChangeText={val => setUnitsOnOrder(val)}
+                    value={UnitsOnOrder.toString()}
+                    placeholderTextColor="#9a73ef"
+                    autoCapitalize="none"
+                    keyboardType='numeric'
+                    selectTextOnFocus={true}
+                />
+
+                <Text style={styles.inputTitle}>Kategoria:</Text>
+                <TextInput style={styles.editInput}
+                    underlineColorAndroid="transparent"
+                    onChangeText={val => setCategoryId(val)}
+                    value={CategoryId.toString()}
+                    placeholderTextColor="#9a73ef"
+                    autoCapitalize="none"
+                    keyboardType='numeric'
+                    selectTextOnFocus={true}
+                />
+
+                <Text style={styles.inputTitle}>Pakkauksen koko:</Text>
+                <TextInput style={styles.editInput}
+                    underlineColorAndroid="transparent"
+                    onChangeText={val => setQuantityPerUnit(val)}
+                    value={QuantityPerUnit.toString()}
+                    placeholderTextColor="#9a73ef"
+                    autoCapitalize="none"
+                    keyboardType='numeric'
+                    selectTextOnFocus={true}
+                />
+
+                <Text style={styles.inputTitle}>Tavarantoimittaja:</Text>
+                <TextInput style={styles.editInput}
+                    underlineColorAndroid="transparent"
+                    onChangeText={val => setSupplierId(val)}
+                    value={SupplierId.toString()}
+                    placeholderTextColor="#9a73ef"
+                    autoCapitalize="none"
+                    keyboardType='numeric'
+                    selectTextOnFocus={true}
+                />
+
+                <Text style={styles.inputTitle}>Tuote poistunut:</Text>
+                <View style={{ flexDirection: 'row', marginLeft: 15, }}>
+                    <Text style={{ marginRight: 4, }}>Ei</Text>
+                    <Switch
+                        value={Discontinued}
+                        onValueChange={val => setDiscontinued(val)}
+                    />
+                    <Text style={{ marginLeft: 4, }}>Kyllä</Text>
                 </View>
-                <View style={styles.modalInfo}>
-                    <Text style={styles.modalTextTitle}>{'Supplier Id: '}</Text>
-                    <Text style={styles.modalText}>{product.supplierId}</Text>
-                </View>
-                <View style={styles.modalInfo}>
-                    <Text style={styles.modalTextTitle}>{'Category Id: '}</Text>
-                    <Text style={styles.modalText}>{product.categoryId}</Text>
-                </View>
-                <View style={styles.modalInfo}>
-                    <Text style={styles.modalTextTitle}>{'Quantity Per Unit: '}</Text>
-                    <Text style={styles.modalText}>{product.quantityPerUnit}</Text>
-                </View>
-                <View style={styles.modalInfo}>
-                    <Text style={styles.modalTextTitle}>{'Unit Price: '}</Text>
-                    <Text style={styles.modalText}>{product.unitPrice}</Text>
-                </View>
-                <View style={styles.modalInfo}>
-                    <Text style={styles.modalTextTitle}>{'Units In Stock: '}</Text>
-                    <Text style={styles.modalText}>{product.unitsInStock}</Text>
-                </View>
-                <View style={styles.modalInfo}>
-                    <Text style={styles.modalTextTitle}>{'Units On Order: '}</Text>
-                    <Text style={styles.modalText}>{product.unitsOnOrder}</Text>
-                </View>
-                <View style={styles.modalInfo}>
-                    <Text style={styles.modalTextTitle}>{'Reorder Level: '}</Text>
-                    <Text style={styles.modalText}>{product.reorderLevel}</Text>
-                </View>
-                <View style={styles.modalInfo}>
-                    <Text style={styles.modalTextTitle}>{'Discontinued: '}</Text>
-                    <Text style={styles.modalText}>{product.discontinued ? product.discontinued.toString() : 'false'}</Text>
-                </View>
-                <View style={styles.modalInfo}>
-                    <Text style={styles.modalTextTitle}>{'Image: '}</Text>
-                </View>
-                <Image source={product.imageLink ? { uri: product.imageLink } : { uri: 'https://www.tibs.org.tw/images/default.jpg' }} style={[styles.centerElement, { height: 60, width: 60, backgroundColor: '#eee', margin: 6, alignSelf: 'center' }]} />
+
+                <Text style={styles.inputTitle}>Kuvan linkki:</Text>
+                <TextInput style={styles.editInput}
+                    underlineColorAndroid="transparent"
+                    onChangeText={val => setImageLink(val)}
+                    value={(ImageLink == null ? '' : ImageLink.toString())}
+                    placeholderTextColor="#9a73ef"
+                    autoCapitalize="none"
+                    selectTextOnFocus={true}
+                />
+                 {/* { validateUrl(ImageLink) == true ? null : ( <Text style={styles.validationError}>Tarkista syöttämäsi URI</Text> )} */}
 
 
-                <TouchableHighlight
-                    style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
-                    onPress={() => {
-                        closeModal(); //HOX
-                        // setProductDetailsModal(!productDetailsModal);
-                    }}
-                >
-                    <Text style={styles.textStyle}>Sulje</Text>
-                </TouchableHighlight>
             </View>
-        </View>
-        
-        )
-        {/* Modal ends here */}
-
+        </ScrollView>
+    </View>
+);
 }
-export default  ProductDetails;
+
+export default EditProduct;

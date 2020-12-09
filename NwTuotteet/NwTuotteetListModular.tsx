@@ -149,7 +149,7 @@ export default function NWTuotteetListModular() {
                         transparent={true}
                         visible={true}
                     >
-                        <EditProduct closeModal={closeEditModal} rfreshAfterEdit={refreshJsonData} passProductId={product.productId}/>
+                        <EditProduct closeModal={closeEditModal} refreshAfterEdit={refreshJsonData} passProductId={product.productId}/>
                     </Modal>
                 ) : null}
 
