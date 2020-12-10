@@ -34,7 +34,8 @@ interface INWProductsResponse {
         const [ReorderLevel, setReorderLevel] = useState('0');
         const [Discontinued, setDiscontinued] = useState(false);
         const [ImageLink, setImageLink] = useState('...');
-        let validaatio=true;
+        //only if all the data is correct, validatio becomes true - validatio stops db save if data is incorrect
+        let validaatio=false;
 
     useEffect(()=>{
         GetProductData();
@@ -128,7 +129,16 @@ interface INWProductsResponse {
 
     }
 
+    function priceValidation(price:string,field:string){
+        if((price=='')||(price===null)||(price.indexOf(',')>0)){
+            validaatio=false;
+            return false;
+        }else{
+            validaatio=true;
+            return true;
+        }
 
+    }
 
 
 
@@ -172,7 +182,7 @@ return (
                     selectTextOnFocus={true}
                     
                 />
-                {/* { ProductName ? null : ( <Text style={styles.validationError}>Anna tuotteen nimi!</Text> )}   */}
+                { ProductName ? null : ( <Text style={styles.validationError}>Anna tuotteen nimi!</Text> )}  
                 {/* { validateString(ProductName) == true ? null : ( <Text style={styles.validationError}>Anna tuotteen nimi!</Text> )} */}
     
                 <Text style={styles.inputTitle}>Hinta:</Text>
@@ -185,7 +195,7 @@ return (
                     keyboardType='numeric'
                     selectTextOnFocus={true}
                 />
-                {/* { priceValidation(UnitPrice, 'UnitPrice') == true ? null : ( <Text style={styles.validationError}>Anna hinta muodossa n.zz!</Text> )} */}
+                { priceValidation(UnitPrice, 'UnitPrice') == true ? null : ( <Text style={styles.validationError}>Anna hinta muodossa n.zz!</Text> )}
                 {/* { validatePrice(UnitPrice) == true ? null : ( <Text style={styles.validationError}>Anna hinta muodossa n.zz!</Text> )} */}
 
                 <Text style={styles.inputTitle}>Varastossa:</Text>
