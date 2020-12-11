@@ -4,6 +4,9 @@ import { FontAwesome5, Octicons } from '@expo/vector-icons'; //iconit käyttöö
 import styles from '../styles/styles';
 import ProductDetails from './ProductDetails';
 import EditProduct from './EditProduct';
+import CreateProduct from './CreateProduct';
+import {Picker} from '@react-native-picker/picker';
+
 
 
 interface INWProductsResponse {
@@ -29,13 +32,19 @@ export default function NWTuotteetListModular() {
     const [productItems, setproductItems] = useState<any>([]);
     const [productItemsCount, setproductItemsCount] = useState(0);
 
+
+    //CRUD modaalien näyttämiseen hooks boolean
     const [productDetailsModal, setProductDetailsModal] = useState(false);
     const [productEditModal, setProductEditModal]=useState(false);
+    const [productCreateModal, setProductCreateModal]=useState(false);
 
 
     {/*Tuotelistan päivityksen muuttujat*/ }
     const [refreshProducts, setRefreshProducts] = useState(false);
     const [refreshIndicator, setRefreshIndicator] = useState(false);
+
+    //picker
+    const[dropdownCategory, setDropdownCategory]=useState('All')
 
     useEffect(() => {
         GetProducts();
@@ -68,15 +77,37 @@ export default function NWTuotteetListModular() {
         setProductEditModal(!productEditModal);
     }
 
+      //Modaali-ikkunan sulkeminen
+      function closeCreateModal() {
+        setProductCreateModal(!productEditModal);
+    }
+
     //TUOTTEEN EDITOINTI IKKUNAN KUTSU
     function editProductFunc(item: INWProductsResponse){
         setProduct(item);
         setProductEditModal(true);
     }
+    //TUOTTEEN LUONNIN IKKUNAN KUTSU
+    function createProductFunc(){
+        
+        setProductCreateModal(true);
+    }
 
+    //picker
+    function filterItems(category:string){
+        if(category==='All'){
+            setDropdownCategory('All');
+            setRefreshProducts(!refreshProducts)
+        }
+        else if(category==='cat1'){
+            setDropdownCategory('cat1');
+            setRefreshProducts(!refreshProducts)
+        }
+    }
 
     return (
         <View style={[styles.mainWrapper]}>
+                
             <View style={[styles.topSection]}>
                 <View>
                     <FontAwesome5 name="boxes" size={25} color="#000" />
@@ -88,10 +119,18 @@ export default function NWTuotteetListModular() {
                     </View>
                 </Pressable>
                 <ActivityIndicator size="small" color="#0000ff" animating={refreshIndicator} />
-
-
             </View>
 
+                <Picker
+                    selectedValue={dropdownCategory}
+                    style={{height:50,width:250}}
+                        prompt='Valitse tuoteryhmä'
+                        onValueChange={(itemValue, itemIndex) =>
+                        filterItems(itemValue.toString())
+                    }>
+                    <Picker.Item label="Hae kaikki tuoteryhmät" value="All"/>
+                    <Picker.Item label="Juomat" value="cat1"/>
+                </Picker>
             <ScrollView>
                 {productItems.map((item: INWProductsResponse) => (
 
@@ -153,7 +192,24 @@ export default function NWTuotteetListModular() {
                     </Modal>
                 ) : null}
 
+                {/*------------------------------ Edit modal komponentin kutsu */}
+                {productCreateModal ? (
+                    <Modal
+                        style={[styles.modalContainer]}
+                        animationType="slide"
+                        transparent={true}
+                        visible={true}
+                    >
+                        <EditProduct closeModal={closeEditModal} refreshAfterEdit={refreshJsonData} passProductId={product.productId}/>
+                    </Modal>
+                ) : null}
+
             </ScrollView>
+            <Pressable onPress={() => createProductFunc()} style={[styles.btnAdd]}>
+                    <View>
+                        <Octicons name="plus" size={55} color="white" style={{}} />
+                    </View>
+                </Pressable>
         </View>
     );
 }

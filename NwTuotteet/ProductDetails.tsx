@@ -30,7 +30,7 @@ interface INWProductsResponse {
 
     //Tuotetietojen haku id:llä tietokannasta
     function GetProductInfo() {
-            let uri = 'https://webapivscareeria.azurewebsites.net/nw/products/' + ProductId;
+            let uri = 'https://webapiharjoituskoodi2020.azurewebsites.net/nw/products/' + ProductId;
             fetch(uri)
                 .then(response => response.json())
                 .then((json: INWProductsResponse) => {
@@ -99,10 +99,7 @@ interface INWProductsResponse {
 
                 <TouchableHighlight
                     style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
-                    onPress={() => {
-                        closeModal(); //HOX
-                        // setProductDetailsModal(!productDetailsModal);
-                    }}
+                    onPress={() => closeModal()}
                 >
                     <Text style={styles.textStyle}>Sulje</Text>
                 </TouchableHighlight>

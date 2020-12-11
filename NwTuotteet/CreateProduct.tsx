@@ -21,8 +21,7 @@ interface INWProductsResponse {
     supplier: string;
     checked: any;
 }
-    const EditProduct = (props:{passProductId:any, closeModal:any, refreshAfterEdit:any})=>{
-        let ProductId=props.passProductId;
+    const CreateProduct = (props:{closeModal:any, refreshAfterEdit:any})=>{
         const [ProductName, setProductName] = useState('...');
         const [SupplierId, setSupplierId] = useState('0');
         const [CategoryId, setCategoryId] = useState('0');
@@ -36,13 +35,13 @@ interface INWProductsResponse {
         //only if all the data is correct, validatio becomes true - validatio stops db save if data is incorrect
         let validaatio=false;
 
-    useEffect(()=>{
-        GetProductData();
-        }, [props.passProductId]);  //aina kun product id muuttuu, päivitetään useEffectin
+    // useEffect(()=>{
+    //     GetProductData();
+    //     }, [props.passProductId]);  //aina kun product id muuttuu, päivitetään useEffectin
 
     //Tuotetietojen haku id:llä tietokannasta
     async function GetProductData() {
-            let uri = 'https://webapiharjoituskoodi2020.azurewebsites.net/nw/products/'+ ProductId;
+            let uri = 'https://webapiharjoituskoodi2020.azurewebsites.net/nw/products/';
             await fetch(uri)
                 .then(response => response.json())
                 .then((json: INWProductsResponse) => {
@@ -62,7 +61,7 @@ interface INWProductsResponse {
 
 
 
-    async function editProductOnPress(ProductName: string){
+    async function CreateProductOnPress(ProductName: string){
         if(Platform.OS==='web'){
             if(validaatio==false){
                 alert('Tuotetta ' + ProductName + ' ei voi tallentaa tietojen puuttellisuuden vuoksi!');
@@ -108,7 +107,7 @@ interface INWProductsResponse {
 
         const apiUrl= 'https://webapiharjoituskoodi2020.azurewebsites.net/nw/products/'+ ProductId;
         fetch(apiUrl, {
-            method:"PUT",
+            method:"POST",
             headers:{
                 "Accept": "application/json",
                 "Content-Type":"application/json; charset=utf-8"
@@ -170,7 +169,7 @@ return (
         <ScrollView>
             <View key={ProductId}>
                 <View style={styles.topSection}>
-                    <Pressable onPress={() => editProductOnPress(ProductName)}>
+                    <Pressable onPress={() => CreateProductOnPress(ProductName)}>
                         <View><Octicons name="check" size={24} color="green" /></View> 
                     </Pressable>
                 
@@ -311,4 +310,4 @@ return (
 );
 }
 
-export default EditProduct;
+export default CreateProduct;

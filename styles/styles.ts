@@ -155,8 +155,12 @@ const styles = StyleSheet.create({
 	modalInfo: {
 		flexDirection: 'row',
 		justifyContent: "space-between",
-    }
-
+    },
+	btnAdd:{width:60,height:60,position:'absolute',bottom:10,left:20,backgroundColor:'#00bfff',
+	borderRadius:50,display:'flex',justifyContent: "center",alignItems:'center',
+	shadowColor: "#000", 
+	shadowOffset: {width: 0,height: 2,},shadowOpacity: 0.25,shadowRadius: 3.84,
+	elevation: 5},
 
 });
 
