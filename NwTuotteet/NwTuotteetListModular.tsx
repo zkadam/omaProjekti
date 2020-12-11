@@ -42,7 +42,7 @@ export default function NWTuotteetListModular() {
     }, [refreshProducts]);
 
     async function GetProducts() {
-        let uri = 'https://webapivscareeria.azurewebsites.net/nw/products/';
+        let uri = 'https://webapiharjoituskoodi2020.azurewebsites.net/nw/products/';
         await fetch(uri)
             .then(response => response.json())
             .then((json: INWProductsResponse) => {

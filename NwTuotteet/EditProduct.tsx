@@ -43,7 +43,7 @@ interface INWProductsResponse {
 
     //Tuotetietojen haku id:llä tietokannasta
     async function GetProductData() {
-            let uri = 'https://webapivscareeria.azurewebsites.net/nw/products/' + ProductId;
+            let uri = 'https://webapiharjoituskoodi2020.azurewebsites.net/nw/products/'+ ProductId;
             await fetch(uri)
                 .then(response => response.json())
                 .then((json: INWProductsResponse) => {
@@ -107,7 +107,7 @@ interface INWProductsResponse {
 
         const prodeditJson=JSON.stringify(product); 
 
-        const apiUrl= 'https://webapivscareeria.azurewebsites.net/nw/products/'+ ProductId;
+        const apiUrl= 'https://webapiharjoituskoodi2020.azurewebsites.net/nw/products/'+ ProductId;
         fetch(apiUrl, {
             method:"PUT",
             headers:{
@@ -138,6 +138,23 @@ interface INWProductsResponse {
             return true;
         }
 
+    }
+    function priceValidation2(price:string,field:string){
+        
+        var newPrice=price;
+        var regi=/^\d*\.?\d*$/g;
+        var isTrue=regi.test(price)
+        if((price=='')||(price===null)){
+            validaatio=false;
+        }
+        else if(!isTrue){
+            alert('delete')
+            newPrice=price.slice(0,-1)
+        }
+    
+              
+        
+        setUnitPrice(newPrice)
     }
 
 
@@ -188,7 +205,9 @@ return (
                 <Text style={styles.inputTitle}>Hinta:</Text>
                 <TextInput style={styles.editInput}
                     underlineColorAndroid="transparent"
-                    onChangeText={val => setUnitPrice(val)}
+                    onChangeText={val => priceValidation2(val,'UnitPrice')}
+                    // onChangeText={val => setUnitPrice(val)}
+
                     value={(UnitPrice.toString() == null ? '0' : UnitPrice.toString())}
                     placeholderTextColor="#9a73ef"
                     autoCapitalize="none"
