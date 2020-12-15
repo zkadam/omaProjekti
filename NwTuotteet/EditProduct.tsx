@@ -32,7 +32,7 @@ interface INWProductsResponse {
         const [UnitsOnOrder, setUnitsOnOrder] = useState('0');
         const [ReorderLevel, setReorderLevel] = useState('0');
         const [Discontinued, setDiscontinued] = useState(false);
-        const [ImageLink, setImageLink] = useState('...');
+        const [ImageLink, setImageLink] = useState('');
         //only if all the data is correct, validatio becomes true - validatio stops db save if data is incorrect
         let validaatio=false;
 
@@ -47,15 +47,15 @@ interface INWProductsResponse {
                 .then(response => response.json())
                 .then((json: INWProductsResponse) => {
                     setProductName(json.productName),
-                    setSupplierId(json.supplierId.toString()),
-                    setCategoryId(json.categoryId.toString()),
-                    setQuantityPerUnit(json.quantityPerUnit.toString()),
-                    setUnitPrice(json.unitPrice.toString()),
-                    setUnitsInStock(json.unitsInStock.toString()),
-                    setUnitsOnOrder(json.unitsOnOrder.toString()),
-                    setReorderLevel(json.reorderLevel.toString()),
+                    setSupplierId(json.supplierId== null ? "":json.supplierId.toString()),
+                    setCategoryId(json.categoryId== null ? "":json.categoryId.toString()),
+                    setQuantityPerUnit(json.quantityPerUnit== null ? "":json.quantityPerUnit),
+                    setUnitPrice(json.unitPrice== null ? "":json.unitPrice.toString()),
+                    setUnitsInStock(json.unitsInStock== null ? "":json.unitsInStock.toString()),
+                    setUnitsOnOrder(json.unitsOnOrder== null ? "":json.unitsOnOrder.toString()),
+                    setReorderLevel(json.reorderLevel== null ? "":json.reorderLevel.toString()),
                     setDiscontinued(json.discontinued),
-                    setImageLink(json.imageLink);      
+                    setImageLink(json.imageLink== null ? "":json.imageLink);      
                 })
           
     }
@@ -92,15 +92,15 @@ interface INWProductsResponse {
         const product=
         {
             ProductName: ProductName,
-            SupplierId: Number(SupplierId),
-            CategoryId: Number(CategoryId),
-            QuantityPerUnit:QuantityPerUnit,
-            UnitPrice:parseFloat(Number(UnitPrice).toFixed(2)),
-            UnitsInStock:Number(UnitsInStock),
-            UnitsOnOrder:Number(UnitsOnOrder),
-            ReorderLevel:Number(ReorderLevel),
+            SupplierId: Number(SupplierId)||null,
+            CategoryId: Number(CategoryId)||null,
+            QuantityPerUnit:Number(QuantityPerUnit)||null,
+            UnitPrice:parseFloat(Number(UnitPrice).toFixed(2))||null,
+            UnitsInStock: Number(UnitsInStock)||null,
+            UnitsOnOrder:Number(UnitsOnOrder)||null,
+            ReorderLevel:Number(ReorderLevel)||null,
             Discontinued:Boolean(Discontinued),
-            ImageLink:ImageLink,
+            ImageLink:ImageLink||null,
 
         };
 
@@ -183,7 +183,7 @@ return (
                 <Text style={styles.inputTitle}>ID:</Text>
                 <TextInput style={styles.inputTitle}
                     underlineColorAndroid="transparent"
-                    defaultValue={ProductId.toString()}
+                    defaultValue={ProductId.toString()||""}
                     autoCapitalize="none"
                     editable={false}
                 />
@@ -192,7 +192,7 @@ return (
                 <TextInput style={styles.editInput} 
                     underlineColorAndroid="transparent"
                     onChangeText={val => setProductName(val)}
-                    value={ProductName.toString()}
+                    value={ProductName.toString()||""}
                     placeholderTextColor="#9a73ef"
                     autoCapitalize="none"
                     selectTextOnFocus={true}
@@ -220,7 +220,7 @@ return (
                 <TextInput style={styles.editInput}
                     underlineColorAndroid="transparent"
                     onChangeText={val => setUnitsInStock((val))}
-                    value={UnitsInStock.toString()}
+                    value={UnitsInStock.toString()||""}
                     placeholderTextColor="#9a73ef"
                     autoCapitalize="none"
                     keyboardType='numeric'
@@ -232,7 +232,7 @@ return (
                 <TextInput style={styles.editInput}
                     underlineColorAndroid="transparent"
                     onChangeText={val => setReorderLevel(val)}
-                    value={ReorderLevel.toString()}
+                    value={ReorderLevel.toString()||""}
                     placeholderTextColor="#9a73ef"
                     autoCapitalize="none"
                     keyboardType='numeric'
@@ -243,7 +243,7 @@ return (
                 <TextInput style={styles.editInput}
                     underlineColorAndroid="transparent"
                     onChangeText={val => setUnitsOnOrder(val)}
-                    value={UnitsOnOrder.toString()}
+                    value={UnitsOnOrder.toString()||""}
                     placeholderTextColor="#9a73ef"
                     autoCapitalize="none"
                     keyboardType='numeric'
@@ -254,7 +254,7 @@ return (
                 <TextInput style={styles.editInput}
                     underlineColorAndroid="transparent"
                     onChangeText={val => setCategoryId(val)}
-                    value={CategoryId.toString()}
+                    value={CategoryId.toString()||""}
                     placeholderTextColor="#9a73ef"
                     autoCapitalize="none"
                     keyboardType='numeric'
@@ -265,7 +265,7 @@ return (
                 <TextInput style={styles.editInput}
                     underlineColorAndroid="transparent"
                     onChangeText={val => setQuantityPerUnit(val)}
-                    value={QuantityPerUnit.toString()}
+                    value={QuantityPerUnit.toString()||""}
                     placeholderTextColor="#9a73ef"
                     autoCapitalize="none"
                     keyboardType='numeric'
@@ -276,7 +276,7 @@ return (
                 <TextInput style={styles.editInput}
                     underlineColorAndroid="transparent"
                     onChangeText={val => setSupplierId(val)}
-                    value={SupplierId.toString()}
+                    value={SupplierId.toString()||""}
                     placeholderTextColor="#9a73ef"
                     autoCapitalize="none"
                     keyboardType='numeric'

@@ -79,7 +79,7 @@ export default function NWTuotteetListModular() {
 
       //Modaali-ikkunan sulkeminen
       function closeCreateModal() {
-        setProductCreateModal(!productEditModal);
+        setProductCreateModal(!productCreateModal);
     }
 
     //TUOTTEEN EDITOINTI IKKUNAN KUTSU
@@ -200,16 +200,18 @@ export default function NWTuotteetListModular() {
                         transparent={true}
                         visible={true}
                     >
-                        <EditProduct closeModal={closeEditModal} refreshAfterEdit={refreshJsonData} passProductId={product.productId}/>
+                        <CreateProduct closeModal={closeCreateModal} refreshAfterEdit={refreshJsonData} />
                     </Modal>
                 ) : null}
 
             </ScrollView>
-            <Pressable onPress={() => createProductFunc()} style={[styles.btnAdd]}>
-                    <View>
-                        <Octicons name="plus" size={55} color="white" style={{}} />
-                    </View>
-                </Pressable>
+            {/* <View> */}
+                <Pressable onPress={() => createProductFunc()} style={[styles.btnAdd]}>
+                        <View>
+                            <Octicons name="plus" size={55} color="white" style={{}} />
+                        </View>
+                    </Pressable>
+            {/* </View> */}
         </View>
     );
 }
