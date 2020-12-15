@@ -68,7 +68,6 @@ interface INWProductsResponse {
                 alert('Tuotetta ' + ProductName + ' ei voi tallentaa tietojen puuttellisuuden vuoksi!');
             }else {
                 await PutToDB();
-                console.log('Tuotetta ' + ProductName + ' muokattu onnistuneesti');
                 props.refreshAfterEdit(true);
                 closeModal();
             }
@@ -79,7 +78,6 @@ interface INWProductsResponse {
                 alert('Tuotetta ' + ProductName + ' ei voi tallentaa tietojen puuttellisuuden vuoksi!');
             }else {
                 await PutToDB();
-               alert('Tuotetta ' + ProductName + ' muokattu onnistuneesti');
                 props.refreshAfterEdit(true);
                 closeModal();
             }
@@ -118,11 +116,19 @@ interface INWProductsResponse {
             .then((response)=>response.json())
             .then((json)=>{
                 const success = json;
+                
                 if(success){
                     console.log(success)
                 }
                 else{
+                    alert('Tuotteen muokkaaminen ei onnistunut')
+                    
                     console.log('error updating ' + ProductName)
+                }
+                if(json.status!==200){alert(json.title)}
+                else{
+                    alert('Tuotteen muokkaaminen onnistui')
+
                 }
             })
 
@@ -169,16 +175,6 @@ return (
     <View style={styles.inputContainer}>
         <ScrollView>
             <View key={ProductId}>
-                <View style={styles.topSection}>
-                    <Pressable onPress={() => editProductOnPress(ProductName)}>
-                        <View><Octicons name="check" size={24} color="green" /></View> 
-                    </Pressable>
-                
-                    <Pressable onPress={() => closeModal()}>
-                        <View><Octicons name="x" size={24} color="black" /></View>
-                    </Pressable>
-                </View>
-
                 <Text style={styles.inputHeaderTitle}>Tuotteen muokkaus:</Text>
                 <Text style={styles.inputTitle}>ID:</Text>
                 <TextInput style={styles.inputTitle}
@@ -307,6 +303,15 @@ return (
 
             </View>
         </ScrollView>
+        <View style={styles.topSection}>
+                    <Pressable onPress={() => editProductOnPress(ProductName)}>
+                        <View><Octicons name="check" size={24} color="green" /></View> 
+                    </Pressable>
+                
+                    <Pressable onPress={() => closeModal()}>
+                        <View><Octicons name="x" size={24} color="gray" /></View>
+                    </Pressable>
+        </View>            
     </View>
 );
 }

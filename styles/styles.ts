@@ -92,7 +92,8 @@ const styles = StyleSheet.create({
 		height: 40,
 	},
 	submitButtonText: {
-		color: 'white'
+		color: 'white',
+		fontWeight:'bold'
 	},
 
 	validationError: {
@@ -162,6 +163,14 @@ const styles = StyleSheet.create({
 	shadowOffset: {width: 0,height: 2,},shadowOpacity: 0.25,shadowRadius: 3.84,
 	elevation: 5},
 
+	delBtn:{backgroundColor: '#FB372C',
+	
+		borderRadius: 20,
+		padding: 10,
+		elevation: 2,
+		display:'flex',justifyContent: "center",alignItems:'center',
+		marginBottom:10,
+},
 });
 
 export default styles;

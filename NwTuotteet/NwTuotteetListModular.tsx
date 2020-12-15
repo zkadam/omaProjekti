@@ -5,6 +5,7 @@ import styles from '../styles/styles';
 import ProductDetails from './ProductDetails';
 import EditProduct from './EditProduct';
 import CreateProduct from './CreateProduct';
+import DeleteProduct from './DeleteProduct';
 import {Picker} from '@react-native-picker/picker';
 
 
@@ -37,6 +38,7 @@ export default function NWTuotteetListModular() {
     const [productDetailsModal, setProductDetailsModal] = useState(false);
     const [productEditModal, setProductEditModal]=useState(false);
     const [productCreateModal, setProductCreateModal]=useState(false);
+    const [productDeleteModal, setProductDeleteModal]=useState(false);
 
 
     {/*Tuotelistan päivityksen muuttujat*/ }
@@ -81,7 +83,10 @@ export default function NWTuotteetListModular() {
       function closeCreateModal() {
         setProductCreateModal(!productCreateModal);
     }
-
+      //Modaali-ikkunan sulkeminen
+      function closeDeleteModal() {
+        setProductDeleteModal(!productDeleteModal);
+    }
     //TUOTTEEN EDITOINTI IKKUNAN KUTSU
     function editProductFunc(item: INWProductsResponse){
         setProduct(item);
@@ -134,15 +139,10 @@ export default function NWTuotteetListModular() {
             <ScrollView>
                 {productItems.map((item: INWProductsResponse) => (
 
-                    <Pressable
+                    <View
                         key={item.productId}
-                        onPress={() => {
-
-                            setProduct(item);
-                            setProductDetailsModal(true);
-
-                        }}
-                        style={({ pressed }) => [{ backgroundColor: pressed ? 'rgba(49, 179, 192, 0.5)' : 'white' }]}
+                        
+                       
                     >
                         <View style={styles.productsContainer}>
                             {/*Mikäli item.imageLink on undefined -> näytetään default -kuva, muuten item.imageLink*/}
@@ -156,15 +156,32 @@ export default function NWTuotteetListModular() {
                                 <Text style={{ color: '#333333', marginBottom: 10 }}>{'\u00E1 ' + (item.unitPrice == null ? 'unitprice is missing ' : item.unitPrice.toFixed(2)) + '\u20AC'}</Text>
                             </View>
 
+  {/*----------------------------------------- DETAILS ICON -------------------------------------*/}
+
+                <View style={{padding:2, marginRight:10, marginTop: 30}}>
+                                    <TouchableOpacity style={[{width:32, height:32}]} onPress={()=>{setProduct(item);setProductDetailsModal(true);}}>
+                                        <Octicons name="clippy" size={24} color="#FEB53C"/>                                    
+                                    </TouchableOpacity>
+
+                </View>
+
             {/*----------------------------------------- EDITING ICON -------------------------------------*/}
                             <View style={{padding:2, marginRight:10, marginTop: 30}}>
                                     <TouchableOpacity style={[{width:32, height:32}]} onPress={()=>editProductFunc(item)}>
-                                        <Octicons name="pencil" size={24} color="black"/>                                    
+                                        <Octicons name="pencil" size={24} color="#2485D5"/>                                    
+                                    </TouchableOpacity>
+
+                            </View>
+            {/*----------------------------------------- Deleting ICON -------------------------------------*/}
+
+                            <View style={{padding:2, marginRight:10, marginTop: 30}}>
+                                    <TouchableOpacity style={[{width:32, height:32}]} onPress={()=>{setProduct(item);setProductDeleteModal(true);}}>
+                                        <Octicons name="trashcan" size={24} color="red"/>                                    
                                     </TouchableOpacity>
 
                             </View>
                         </View>
-                    </Pressable>
+                    </View>
                 ))}
 
 
@@ -201,6 +218,19 @@ export default function NWTuotteetListModular() {
                         visible={true}
                     >
                         <CreateProduct closeModal={closeCreateModal} refreshAfterEdit={refreshJsonData} />
+                    </Modal>
+                ) : null}
+
+
+                 {/* ------------------------------Delete modal komponentin kutsu */}
+                 {productDeleteModal ? (
+                    <Modal
+                        style={[styles.modalContainer]}
+                        animationType="slide"
+                        transparent={true}
+                        visible={true}
+                    >
+                        <DeleteProduct closeModal={closeDeleteModal} passProductId={product.productId} refreshAfterEdit={refreshJsonData}></DeleteProduct>
                     </Modal>
                 ) : null}
 
