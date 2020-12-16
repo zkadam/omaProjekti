@@ -49,11 +49,13 @@ interface INWProductsResponse {
                     "Content-Type":"application/json; charset=utf-8"
                 },
             })
-                .then((response)=>response.json())
+                // .then((response)=>response.json())
                 .then((json)=>{
                     const success = json;
                     if(success){
-                        if(json.status!==200){alert(json.title)}
+                        if(json.status!==200){
+                            if(json.status===401){alert('Tuotteen poistaminen ei onnistunut - unauthorized')}
+                            else{alert('Tuotteen poistaminen ei onnistunut - onko tuote jossain aktiivisessa tilauksessa?')}}
                         else{
                             alert('Tuotteen poistaminen onnistui')
         

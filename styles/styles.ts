@@ -9,9 +9,8 @@ const styles = StyleSheet.create({
 	},
 	topSection: {
 		flexDirection: 'row', 
-		justifyContent:'space-between',
+		justifyContent:'space-around',
         backgroundColor: '#fff', 
-		padding: 20,
 	},
 	pickerSection: {
 		flexDirection: 'row', 

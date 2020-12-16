@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Text, View,  Image,  ScrollView, Pressable,Platform,TextInput,Switch, TouchableHighlight,} from 'react-native';
 import {  Octicons } from '@expo/vector-icons'; //iconit käyttöön!
 import styles from '../styles/styles';
+import { color } from 'react-native-reanimated';
 
 
 interface INWProductsResponse {
@@ -62,12 +63,12 @@ interface INWProductsResponse {
 
 
 
-    async function editProductOnPress(ProductName: string){
+     function editProductOnPress(ProductName: string){
         if(Platform.OS==='web'){
             if(validaatio==false){
                 alert('Tuotetta ' + ProductName + ' ei voi tallentaa tietojen puuttellisuuden vuoksi!');
             }else {
-                await PutToDB();
+                 PutToDB();
                 props.refreshAfterEdit(true);
                 closeModal();
             }
@@ -77,7 +78,7 @@ interface INWProductsResponse {
             if(validaatio==false){
                 alert('Tuotetta ' + ProductName + ' ei voi tallentaa tietojen puuttellisuuden vuoksi!');
             }else {
-                await PutToDB();
+                 PutToDB();
                 props.refreshAfterEdit(true);
                 closeModal();
             }
@@ -92,7 +93,7 @@ interface INWProductsResponse {
             ProductName: ProductName,
             SupplierId: Number(SupplierId)||null,
             CategoryId: Number(CategoryId)||null,
-            QuantityPerUnit:Number(QuantityPerUnit)||null,
+            QuantityPerUnit:QuantityPerUnit||null,
             UnitPrice:parseFloat(Number(UnitPrice).toFixed(2))||null,
             UnitsInStock: Number(UnitsInStock)||null,
             UnitsOnOrder:Number(UnitsOnOrder)||null,
@@ -117,15 +118,8 @@ interface INWProductsResponse {
             .then((json)=>{
                 const success = json;
                 
-                if(success){
-                    console.log(success)
-                }
-                else{
-                    alert('Tuotteen muokkaaminen ei onnistunut')
-                    
-                    console.log('error updating ' + ProductName)
-                }
-                if(json.status!==200){alert(json.title)}
+              
+                if(json.status!==200){alert(JSON.stringify(json))}
                 else{
                     alert('Tuotteen muokkaaminen onnistui')
 
@@ -215,7 +209,7 @@ return (
                 <Text style={styles.inputTitle}>Varastossa:</Text>
                 <TextInput style={styles.editInput}
                     underlineColorAndroid="transparent"
-                    onChangeText={val => setUnitsInStock((val))}
+                    onChangeText={val => {if((val.match("^[0-9]*$")&&0<parseInt(val)&&parseInt(val)<32767)||val===""){setUnitsInStock(val)}}}
                     value={UnitsInStock.toString()||""}
                     placeholderTextColor="#9a73ef"
                     autoCapitalize="none"
@@ -227,7 +221,7 @@ return (
                 <Text style={styles.inputTitle}>Hälytysraja:</Text>
                 <TextInput style={styles.editInput}
                     underlineColorAndroid="transparent"
-                    onChangeText={val => setReorderLevel(val)}
+                    onChangeText={val => {if((val.match("^[0-9]*$")&&0<parseInt(val)&&parseInt(val)<32767)||val===""){setReorderLevel(val)}}}
                     value={ReorderLevel.toString()||""}
                     placeholderTextColor="#9a73ef"
                     autoCapitalize="none"
@@ -238,7 +232,7 @@ return (
                 <Text style={styles.inputTitle}>Tilauksessa:</Text>
                 <TextInput style={styles.editInput}
                     underlineColorAndroid="transparent"
-                    onChangeText={val => setUnitsOnOrder(val)}
+                    onChangeText={val => {if((val.match("^[0-9]*$")&&0<parseInt(val)&&parseInt(val)<32767)||val===""){setUnitsOnOrder(val)}}}
                     value={UnitsOnOrder.toString()||""}
                     placeholderTextColor="#9a73ef"
                     autoCapitalize="none"
@@ -261,10 +255,9 @@ return (
                 <TextInput style={styles.editInput}
                     underlineColorAndroid="transparent"
                     onChangeText={val => setQuantityPerUnit(val)}
-                    value={QuantityPerUnit.toString()||""}
+                    value={QuantityPerUnit||""}
                     placeholderTextColor="#9a73ef"
                     autoCapitalize="none"
-                    keyboardType='numeric'
                     selectTextOnFocus={true}
                 />
 
@@ -304,12 +297,12 @@ return (
             </View>
         </ScrollView>
         <View style={styles.topSection}>
-                    <Pressable onPress={() => editProductOnPress(ProductName)}>
-                        <View><Octicons name="check" size={24} color="green" /></View> 
+                    <Pressable style={{ padding:20}} onPress={() => editProductOnPress(ProductName)}>
+                        <View><Octicons name="check" size={30} color="green" /></View> 
                     </Pressable>
                 
-                    <Pressable onPress={() => closeModal()}>
-                        <View><Octicons name="x" size={24} color="gray" /></View>
+                    <Pressable style={{padding:20}} onPress={() => closeModal()}>
+                        <View><Octicons name="x" size={30} color="gray" /></View>
                     </Pressable>
         </View>            
     </View>

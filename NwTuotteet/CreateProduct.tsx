@@ -50,7 +50,7 @@ import styles from '../styles/styles';
             ProductName: ProductName,
             SupplierId: Number(SupplierId)||null,
             CategoryId: Number(CategoryId)||null,
-            QuantityPerUnit:Number(QuantityPerUnit)||null,
+            QuantityPerUnit:QuantityPerUnit||null,
             UnitPrice:parseFloat(Number(UnitPrice).toFixed(2))||null,
             UnitsInStock: Number(UnitsInStock)||null,
             UnitsOnOrder:Number(UnitsOnOrder)||null,
@@ -74,16 +74,7 @@ alert(prodCreateJson)
         })
             .then((response)=>response.json())
             .then((json)=>{
-                const success = json;
-                if(success){
-                    console.log(success)
-                }
-                else{
-                    alert('Tuotteen lisääminen ei onnistunut')
-                    
-                    console.log('error lisäyksessä ' + ProductName)
-                }
-                if(json.status!==200){alert(json.title)}
+                  if(json.status!==200){alert(JSON.stringify(json))}
                 else{
                     alert('Tuotteen lisäys onnistui')
 
@@ -130,16 +121,7 @@ return (
     <View style={styles.inputContainer}>
         <ScrollView>
             <View>
-                <View style={styles.topSection}>
-                    <Pressable onPress={() => CreateProductOnPress(ProductName)}>
-                        <View><Octicons name="check" size={24} color="green" /></View> 
-                    </Pressable>
-                
-                    <Pressable onPress={() => closeModal()}>
-                        <View><Octicons name="x" size={24} color="black" /></View>
-                    </Pressable>
-                </View>
-
+             
                 <Text style={styles.inputHeaderTitle}>Tuotteen liäys:</Text>
                 
                 <Text style={styles.inputTitle}>Nimi:</Text>
@@ -172,7 +154,7 @@ return (
                 <Text style={styles.inputTitle}>Varastossa:</Text>
                 <TextInput style={styles.editInput}
                     underlineColorAndroid="transparent"
-                    onChangeText={val => setUnitsInStock((val))}
+                    onChangeText={val => {if((val.match("^[0-9]*$")&&0<parseInt(val)&&parseInt(val)<32767)||val===""){setUnitsInStock(val)}}}
                     placeholderTextColor="#9a73ef"
                     autoCapitalize="none"
                     keyboardType='numeric'
@@ -183,7 +165,7 @@ return (
                 <Text style={styles.inputTitle}>Hälytysraja:</Text>
                 <TextInput style={styles.editInput}
                     underlineColorAndroid="transparent"
-                    onChangeText={val => setReorderLevel(val)}
+                    onChangeText={val => {if((val.match("^[0-9]*$")&&0<parseInt(val)&&parseInt(val)<32767)||val===""){setReorderLevel(val)}}}
                     placeholderTextColor="#9a73ef"
                     autoCapitalize="none"
                     keyboardType='numeric'
@@ -193,7 +175,7 @@ return (
                 <Text style={styles.inputTitle}>Tilauksessa:</Text>
                 <TextInput style={styles.editInput}
                     underlineColorAndroid="transparent"
-                    onChangeText={val => setUnitsOnOrder(val)}
+                    onChangeText={val => {if((val.match("^[0-9]*$")&&0<parseInt(val)&&parseInt(val)<32767)||val===""){setUnitsOnOrder(val)}}}
                     placeholderTextColor="#9a73ef"
                     autoCapitalize="none"
                     keyboardType='numeric'
@@ -216,7 +198,6 @@ return (
                     onChangeText={val => setQuantityPerUnit(val)}
                     placeholderTextColor="#9a73ef"
                     autoCapitalize="none"
-                    keyboardType='numeric'
                     selectTextOnFocus={true}
                 />
 
@@ -250,18 +231,17 @@ return (
                 />
                  {/* { validateUrl(ImageLink) == true ? null : ( <Text style={styles.validationError}>Tarkista syöttämäsi URI</Text> )} */}
 
-
-
-                <Pressable
-                    style={styles.submitButton}
-                    onPress={()=>CreateProductOnPress(ProductName) }
-                >
-                   <Text style={styles.submitButtonText}>{' Lisää tuote '}</Text>     
-                </Pressable>
-
-
             </View>
         </ScrollView>
+        <View style={styles.topSection}>
+                    <Pressable style={{ padding:20}} onPress={() => CreateProductOnPress(ProductName)}>
+                        <View><Octicons name="check" size={30} color="green" /></View> 
+                    </Pressable>
+                
+                    <Pressable style={{padding:20}} onPress={() => closeModal()}>
+                        <View><Octicons name="x" size={30} color="gray" /></View>
+                    </Pressable>
+        </View>            
     </View>
 );
 }

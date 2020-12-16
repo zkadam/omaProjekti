@@ -8,8 +8,6 @@ import CreateProduct from './CreateProduct';
 import DeleteProduct from './DeleteProduct';
 import {Picker} from '@react-native-picker/picker';
 
-
-
 interface INWProductsResponse {
     //Typescript -interface käytetään productItems -muuttujassa json
     productId: number;
@@ -32,19 +30,11 @@ export default function NWTuotteetListModular() {
     const [product, setProduct] = useState<Partial<INWProductsResponse>>({});
     const [productItems, setproductItems] = useState<any>([]);
     const [productItemsCount, setproductItemsCount] = useState(0);
-
-
     //CRUD modaalien näyttämiseen hooks boolean
-    const [productDetailsModal, setProductDetailsModal] = useState(false);
-    const [productEditModal, setProductEditModal]=useState(false);
-    const [productCreateModal, setProductCreateModal]=useState(false);
-    const [productDeleteModal, setProductDeleteModal]=useState(false);
-
-
+    const [crudModal, setCrudModal]=useState('none');
     {/*Tuotelistan päivityksen muuttujat*/ }
     const [refreshProducts, setRefreshProducts] = useState(false);
     const [refreshIndicator, setRefreshIndicator] = useState(false);
-
     //picker
     const[dropdownCategory, setDropdownCategory]=useState('All')
 
@@ -69,35 +59,10 @@ export default function NWTuotteetListModular() {
         setRefreshIndicator(true);
     }
 
-    //Modaali-ikkunan sulkeminen
-    function closeDetailsModal() {
-        setProductDetailsModal(!productDetailsModal);
+    function closeCrudModal() {
+        setCrudModal('none');
     }
-
-       //Modaali-ikkunan sulkeminen
-       function closeEditModal() {
-        setProductEditModal(!productEditModal);
-    }
-
-      //Modaali-ikkunan sulkeminen
-      function closeCreateModal() {
-        setProductCreateModal(!productCreateModal);
-    }
-      //Modaali-ikkunan sulkeminen
-      function closeDeleteModal() {
-        setProductDeleteModal(!productDeleteModal);
-    }
-    //TUOTTEEN EDITOINTI IKKUNAN KUTSU
-    function editProductFunc(item: INWProductsResponse){
-        setProduct(item);
-        setProductEditModal(true);
-    }
-    //TUOTTEEN LUONNIN IKKUNAN KUTSU
-    function createProductFunc(){
-        
-        setProductCreateModal(true);
-    }
-
+  
     //picker
     function filterItems(category:string){
         if(category==='All'){
@@ -139,11 +104,7 @@ export default function NWTuotteetListModular() {
             <ScrollView>
                 {productItems.map((item: INWProductsResponse) => (
 
-                    <View
-                        key={item.productId}
-                        
-                       
-                    >
+                    <View key={item.productId}    >
                         <View style={styles.productsContainer}>
                             {/*Mikäli item.imageLink on undefined -> näytetään default -kuva, muuten item.imageLink*/}
                             <Image source={item.imageLink ? { uri: item.imageLink } : { uri: 'https://www.tibs.org.tw/images/default.jpg' }}
@@ -159,19 +120,19 @@ export default function NWTuotteetListModular() {
   {/*----------------------------------------- DETAILS ICON -------------------------------------*/}
 
                 <View style={{padding:2, marginRight:5, marginTop: 5,}}>
-                                    <TouchableOpacity style={[{width:32, height:32}]} onPress={()=>{setProduct(item);setProductDetailsModal(true);}}>
+                                    <TouchableOpacity style={[{width:32, height:32}]} onPress={()=>{setProduct(item);setCrudModal('details');}}>
                                         <Octicons name="clippy" size={30} color="#FEB53C"/>                                    
                                     </TouchableOpacity>
 
 
             {/*----------------------------------------- EDITING ICON -------------------------------------*/}
-                                    <TouchableOpacity style={[{width:32, height:32}]} onPress={()=>editProductFunc(item)}>
+                                    <TouchableOpacity style={[{width:32, height:32}]} onPress={()=>{setProduct(item);setCrudModal('edit');}}>
                                         <Octicons name="pencil" size={30} color="#2485D5"/>                                    
                                     </TouchableOpacity>
 
             {/*----------------------------------------- Deleting ICON -------------------------------------*/}
 
-                                    <TouchableOpacity style={[{width:32, height:32}]} onPress={()=>{setProduct(item);setProductDeleteModal(true);}}>
+                                    <TouchableOpacity style={[{width:32, height:32}]} onPress={()=>{setProduct(item);setCrudModal('delete');}}>
                                         <Octicons name="trashcan" size={30} color="red"/>                                    
                                     </TouchableOpacity>
 
@@ -181,58 +142,26 @@ export default function NWTuotteetListModular() {
                 ))}
 
 
-                {/* ------------------------------Details modal komponentin kutsu */}
-                {productDetailsModal ? (
+                {/* ------------------------------ modal komponentin kutsu */}
                     <Modal
                         style={[styles.modalContainer]}
                         animationType="slide"
                         transparent={true}
-                        visible={true}
-                    >
-                        <ProductDetails closeModal={closeDetailsModal} passProductId={product.productId}></ProductDetails>
+                        visible={crudModal!=='none'}
+                        >
+                        {/* -------------------CHOOSING WICH MODAL TO RENDER BASED ON CRUD MODAL STRING MUUTTUJA------------------- */}
+                     
+                {crudModal==='details'?<ProductDetails closeModal={closeCrudModal} passProductId={product.productId}/>:null}
+                {crudModal==='edit'? <EditProduct closeModal={closeCrudModal} refreshAfterEdit={refreshJsonData} passProductId={product.productId}/> :null}
+                {crudModal==='delete'?<DeleteProduct closeModal={closeCrudModal} passProductId={product.productId} refreshAfterEdit={refreshJsonData}/>:null}
+                {crudModal==='create'? <CreateProduct closeModal={closeCrudModal} refreshAfterEdit={refreshJsonData} /> :null}
+                            
                     </Modal>
-                ) : null}
-
-                {/*------------------------------ Edit modal komponentin kutsu */}
-                {productEditModal ? (
-                    <Modal
-                        style={[styles.modalContainer]}
-                        animationType="slide"
-                        transparent={true}
-                        visible={true}
-                    >
-                        <EditProduct closeModal={closeEditModal} refreshAfterEdit={refreshJsonData} passProductId={product.productId}/>
-                    </Modal>
-                ) : null}
-
-                {/*------------------------------ Edit modal komponentin kutsu */}
-                {productCreateModal ? (
-                    <Modal
-                        style={[styles.modalContainer]}
-                        animationType="slide"
-                        transparent={true}
-                        visible={true}
-                    >
-                        <CreateProduct closeModal={closeCreateModal} refreshAfterEdit={refreshJsonData} />
-                    </Modal>
-                ) : null}
-
-
-                 {/* ------------------------------Delete modal komponentin kutsu */}
-                 {productDeleteModal ? (
-                    <Modal
-                        style={[styles.modalContainer]}
-                        animationType="slide"
-                        transparent={true}
-                        visible={true}
-                    >
-                        <DeleteProduct closeModal={closeDeleteModal} passProductId={product.productId} refreshAfterEdit={refreshJsonData}></DeleteProduct>
-                    </Modal>
-                ) : null}
+                     
 
             </ScrollView>
             {/* <View> */}
-                <Pressable onPress={() => createProductFunc()} style={[styles.btnAdd]}>
+                <Pressable onPress={() => setCrudModal('create')} style={[styles.btnAdd]}>
                         <View>
                             <Octicons name="plus" size={55} color="white" style={{}} />
                         </View>
