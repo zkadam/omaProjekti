@@ -25,7 +25,6 @@ import styles from '../styles/styles';
                 alert('Tuotetta ' + ProductName + ' ei voi tallentaa tietojen puuttellisuuden vuoksi!');
             }else {
                 PostToDB();
-                console.log('Tuote ' + ProductName + ' lisätty onnistuneesti');
                 props.refreshAfterEdit(true);
                 closeModal();
             }
@@ -77,10 +76,17 @@ alert(prodCreateJson)
             .then((json)=>{
                 const success = json;
                 if(success){
-                    // alert(success)
+                    console.log(success)
                 }
                 else{
-                    alert('error updating ' + ProductName)
+                    alert('Tuotteen lisääminen ei onnistunut')
+                    
+                    console.log('error lisäyksessä ' + ProductName)
+                }
+                if(json.status!==200){alert(json.title)}
+                else{
+                    alert('Tuotteen lisäys onnistui')
+
                 }
             })
 

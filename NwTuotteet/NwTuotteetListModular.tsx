@@ -158,25 +158,21 @@ export default function NWTuotteetListModular() {
 
   {/*----------------------------------------- DETAILS ICON -------------------------------------*/}
 
-                <View style={{padding:2, marginRight:10, marginTop: 30}}>
+                <View style={{padding:2, marginRight:5, marginTop: 5,}}>
                                     <TouchableOpacity style={[{width:32, height:32}]} onPress={()=>{setProduct(item);setProductDetailsModal(true);}}>
-                                        <Octicons name="clippy" size={24} color="#FEB53C"/>                                    
+                                        <Octicons name="clippy" size={30} color="#FEB53C"/>                                    
                                     </TouchableOpacity>
 
-                </View>
 
             {/*----------------------------------------- EDITING ICON -------------------------------------*/}
-                            <View style={{padding:2, marginRight:10, marginTop: 30}}>
                                     <TouchableOpacity style={[{width:32, height:32}]} onPress={()=>editProductFunc(item)}>
-                                        <Octicons name="pencil" size={24} color="#2485D5"/>                                    
+                                        <Octicons name="pencil" size={30} color="#2485D5"/>                                    
                                     </TouchableOpacity>
 
-                            </View>
             {/*----------------------------------------- Deleting ICON -------------------------------------*/}
 
-                            <View style={{padding:2, marginRight:10, marginTop: 30}}>
                                     <TouchableOpacity style={[{width:32, height:32}]} onPress={()=>{setProduct(item);setProductDeleteModal(true);}}>
-                                        <Octicons name="trashcan" size={24} color="red"/>                                    
+                                        <Octicons name="trashcan" size={30} color="red"/>                                    
                                     </TouchableOpacity>
 
                             </View>

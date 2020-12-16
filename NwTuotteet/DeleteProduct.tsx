@@ -53,7 +53,11 @@ interface INWProductsResponse {
                 .then((json)=>{
                     const success = json;
                     if(success){
-                        console.log(success)
+                        if(json.status!==200){alert(json.title)}
+                        else{
+                            alert('Tuotteen poistaminen onnistui')
+        
+                        }
                         props.refreshAfterEdit(true);
                         closeModal();
                     }
@@ -144,7 +148,7 @@ interface INWProductsResponse {
                     </Pressable>
                 
                     <TouchableHighlight
-                    style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+                    style={{ ...styles.delBtn, backgroundColor: "#2196F3",paddingHorizontal:45 }}
                     onPress={() => closeModal()}
                 >
                     <Text style={styles.textStyle}>Sulje</Text>
