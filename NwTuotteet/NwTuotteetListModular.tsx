@@ -25,6 +25,17 @@ interface INWProductsResponse {
     supplier: string;
     checked: any;
 }
+//filter interface
+interface INWCategories {
+    //Typescript -interface käytetään productItems -muuttujassa json
+ 
+    categoryId: number;
+    categoryName:string;
+    description:string;
+    picture:string
+   
+}
+
 
 export default function NWTuotteetListModular() {
     const [product, setProduct] = useState<Partial<INWProductsResponse>>({});
@@ -36,23 +47,62 @@ export default function NWTuotteetListModular() {
     const [refreshProducts, setRefreshProducts] = useState(false);
     const [refreshIndicator, setRefreshIndicator] = useState(false);
     //picker
-    const[dropdownCategory, setDropdownCategory]=useState('All')
+    const[dropdownCategory, setDropdownCategory]=useState('All');
+    const[categories, setCategories]=useState<any>([]);
+    const[selectedCat, setSelectedCat]=useState<any>('All');
+
 
     useEffect(() => {
+        GetCategories();
         GetProducts();
     }, [refreshProducts]);
+
+
+    async function GetCategories() {
+        let uri = 'https://webapiharjoituskoodi2020.azurewebsites.net/nw/categories/';
+        await fetch(uri)
+            .then(response => response.json())
+            .then((json: INWCategories) => {
+                setCategories(json); //Tuotteet kirjoitetaan productItems -array muuttujaan.
+                 })
+        setRefreshIndicator(false);
+    }
+
 
     async function GetProducts() {
         let uri = 'https://webapiharjoituskoodi2020.azurewebsites.net/nw/products/';
         await fetch(uri)
             .then(response => response.json())
-            .then((json: INWProductsResponse) => {
-                setproductItems(json); //Tuotteet kirjoitetaan productItems -array muuttujaan.
+            .then((json: INWProductsResponse[]) => {
+                if(selectedCat==="All"){
+                    setproductItems(json); //Tuotteet kirjoitetaan productItems -array muuttujaan.
+                }
+                else{
+                    const filtered=json.filter(x=>x.categoryId===parseInt(selectedCat));
+                    setproductItems(filtered);
+                }
                 const fetchCount = Object.keys(json).length; //Lasketaan montako tuotenimikettä on yhteensä.
                 setproductItemsCount(fetchCount); //Kirjoitetaan tuotenimikkeiden määrä productItemsCount -muuttujaan.
             })
         setRefreshIndicator(false);
     }
+
+
+
+    // async function GetProducts() {
+    //     let uri = 'https://webapiharjoituskoodi2020.azurewebsites.net/nw/products/';
+    //     await fetch(uri)
+    //         .then(response => response.json())
+    //         .then((json: INWProductsResponse) => {
+    //             setproductItems(json); //Tuotteet kirjoitetaan productItems -array muuttujaan.
+    //             const fetchCount = Object.keys(json).length; //Lasketaan montako tuotenimikettä on yhteensä.
+    //             setproductItemsCount(fetchCount); //Kirjoitetaan tuotenimikkeiden määrä productItemsCount -muuttujaan.
+    //         })
+    //     setRefreshIndicator(false);
+    // }
+
+
+
 
     function refreshJsonData() {
         setRefreshProducts(!refreshProducts);
@@ -64,15 +114,15 @@ export default function NWTuotteetListModular() {
     }
   
     //picker
-    function filterItems(category:string){
-        if(category==='All'){
-            setDropdownCategory('All');
-            setRefreshProducts(!refreshProducts)
-        }
-        else if(category==='cat1'){
-            setDropdownCategory('cat1');
-            setRefreshProducts(!refreshProducts)
-        }
+   
+
+    const categoriesList= categories.map((cat:INWCategories,index:any)=>{
+        return(<Picker.Item label={cat.categoryId.toString()+'. : '+cat.categoryName} value={cat.categoryId} key={index}/>)
+    });
+
+    function fetchFiltered(value:any){
+        setSelectedCat(value);
+        setRefreshProducts(!refreshProducts)
     }
 
     return (
@@ -90,16 +140,15 @@ export default function NWTuotteetListModular() {
                 </Pressable>
                 <ActivityIndicator size="small" color="#0000ff" animating={refreshIndicator} />
             </View>
-
+{/* --------------------------------------------------PICKER */}
                 <Picker
-                    selectedValue={dropdownCategory}
+                    selectedValue={selectedCat}
                     style={{height:50,width:250}}
                         prompt='Valitse tuoteryhmä'
-                        onValueChange={(itemValue, itemIndex) =>
-                        filterItems(itemValue.toString())
-                    }>
+                        onValueChange={(value) =>fetchFiltered(value)}
+                        >
                     <Picker.Item label="Hae kaikki tuoteryhmät" value="All"/>
-                    <Picker.Item label="Juomat" value="cat1"/>
+                    {categoriesList}
                 </Picker>
             <ScrollView>
                 {productItems.map((item: INWProductsResponse) => (

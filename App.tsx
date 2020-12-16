@@ -24,7 +24,6 @@ export default function App() {
       //Muuttujien esittely:
       const Tab = createMaterialTopTabNavigator(); //Swipe navi -muuttuja
       const iconSize = 22; //Määritellään ylänavin iconien koko
-      const tintColor = 'red'; //Määritellään ylänavin iconien koko
       
   return (
     <NavigationContainer> 
@@ -35,7 +34,7 @@ export default function App() {
             tabBarOptions={{
               
                 activeTintColor: '#ffffff', //Aktiivisen 'linkin' väri
-                inactiveTintColor: '#000000',//Inaktiivisen 'linkin' väri
+                inactiveTintColor: '#A1D2DC',//Inaktiivisen 'linkin' väri
                 showLabel: false, //Näytetäänkö navigaatio vai ei
                 labelStyle: { fontSize: 10 }, //stylemääritykset tähän
                 showIcon: true, //Ikonin näyttö, jos sellainen määritelty
