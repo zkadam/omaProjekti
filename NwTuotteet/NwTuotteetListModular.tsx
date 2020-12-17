@@ -49,7 +49,7 @@ export default function NWTuotteetListModular() {
     //picker
     const[dropdownCategory, setDropdownCategory]=useState('All');
     const[categories, setCategories]=useState<any>([]);
-    const[selectedCat, setSelectedCat]=useState<any>('All');
+    const[selectedCat, setSelectedCat]=useState<number>(0);
 
 
     useEffect(() => {
@@ -69,37 +69,40 @@ export default function NWTuotteetListModular() {
     }
 
 
-    async function GetProducts() {
-        let uri = 'https://webapiharjoituskoodi2020.azurewebsites.net/nw/products/';
-        await fetch(uri)
-            .then(response => response.json())
-            .then((json: INWProductsResponse[]) => {
-                if(selectedCat==="All"){
-                    setproductItems(json); //Tuotteet kirjoitetaan productItems -array muuttujaan.
-                }
-                else{
-                    const filtered=json.filter(x=>x.categoryId===parseInt(selectedCat));
-                    setproductItems(filtered);
-                }
-                const fetchCount = Object.keys(json).length; //Lasketaan montako tuotenimikettä on yhteensä.
-                setproductItemsCount(fetchCount); //Kirjoitetaan tuotenimikkeiden määrä productItemsCount -muuttujaan.
-            })
-        setRefreshIndicator(false);
-    }
-
-
-
     // async function GetProducts() {
     //     let uri = 'https://webapiharjoituskoodi2020.azurewebsites.net/nw/products/';
     //     await fetch(uri)
     //         .then(response => response.json())
-    //         .then((json: INWProductsResponse) => {
-    //             setproductItems(json); //Tuotteet kirjoitetaan productItems -array muuttujaan.
+    //         .then((json: INWProductsResponse[]) => {
+    //             if(selectedCat==="All"){
+    //                 setproductItems(json); //Tuotteet kirjoitetaan productItems -array muuttujaan.
+    //             }
+    //             else{
+    //                 const filtered=json.filter(x=>x.categoryId===parseInt(selectedCat));
+    //                 setproductItems(filtered);
+    //             }
     //             const fetchCount = Object.keys(json).length; //Lasketaan montako tuotenimikettä on yhteensä.
     //             setproductItemsCount(fetchCount); //Kirjoitetaan tuotenimikkeiden määrä productItemsCount -muuttujaan.
     //         })
     //     setRefreshIndicator(false);
     // }
+
+
+
+    async function GetProducts() {
+        var uri = 'https://webapiharjoituskoodi2020.azurewebsites.net/nw/products/'
+        if(selectedCat===0){uri = 'https://webapiharjoituskoodi2020.azurewebsites.net/nw/products/'}
+        else{uri = 'https://webapiharjoituskoodi2020.azurewebsites.net/nw/products/Category/'+selectedCat.toString();}
+        await fetch(uri)
+             .then(response => response.json())
+             .then((json: INWProductsResponse) => {
+                 setproductItems(json); //Tuotteet kirjoitetaan productItems -array muuttujaan.
+                 const fetchCount = Object.keys(json).length; //Lasketaan montako tuotenimikettä on yhteensä.
+                 setproductItemsCount(fetchCount); //Kirjoitetaan tuotenimikkeiden määrä productItemsCount -muuttujaan.
+             })
+         setRefreshIndicator(false);
+        
+    }
 
 
 
@@ -142,12 +145,13 @@ export default function NWTuotteetListModular() {
             </View>
 {/* --------------------------------------------------PICKER */}
                 <Picker
+                
                     selectedValue={selectedCat}
                     style={{height:50,width:250}}
                         prompt='Valitse tuoteryhmä'
                         onValueChange={(value) =>fetchFiltered(value)}
                         >
-                    <Picker.Item label="Hae kaikki tuoteryhmät" value="All"/>
+                    <Picker.Item label="Hae kaikki tuoteryhmät" value={0}/>
                     {categoriesList}
                 </Picker>
             <ScrollView>
