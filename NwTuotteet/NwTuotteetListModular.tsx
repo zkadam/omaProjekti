@@ -7,6 +7,7 @@ import EditProduct from './EditProduct';
 import CreateProduct from './CreateProduct';
 import DeleteProduct from './DeleteProduct';
 import {Picker} from '@react-native-picker/picker';
+import CategoriesPicker from './CategoriesPicker'
 
 interface INWProductsResponse {
     //Typescript -interface käytetään productItems -muuttujassa json
@@ -25,17 +26,6 @@ interface INWProductsResponse {
     supplier: string;
     checked: any;
 }
-//filter interface
-interface INWCategories {
-    //Typescript -interface käytetään productItems -muuttujassa json
- 
-    categoryId: number;
-    categoryName:string;
-    description:string;
-    picture:string
-   
-}
-
 
 export default function NWTuotteetListModular() {
     const [product, setProduct] = useState<Partial<INWProductsResponse>>({});
@@ -49,43 +39,14 @@ export default function NWTuotteetListModular() {
     //picker
     const[categories, setCategories]=useState<any>([]);
     const[selectedCat, setSelectedCat]=useState<number>(0);
+    const[refreshCategoriat, setRefreshCategoriat]=useState(true);
 
 
     useEffect(() => {
-        GetCategories();
+        
         GetProducts();
     }, [refreshProducts]);
 
-// --------------------------------------------------------------HAETAAN KATEGORIAT PICKERIIN---------------------
-
-    async function GetCategories() {
-        let uri = 'https://webapiharjoituskoodi2020.azurewebsites.net/nw/categories/';
-        await fetch(uri)
-            .then(response => response.json())
-            .then((json: INWCategories) => {
-                setCategories(json); //Tuotteet kirjoitetaan productItems -array muuttujaan.
-                 })
-        setRefreshIndicator(false);
-    }
-
-
-    // async function GetProducts() {
-    //     let uri = 'https://webapiharjoituskoodi2020.azurewebsites.net/nw/products/';
-    //     await fetch(uri)
-    //         .then(response => response.json())
-    //         .then((json: INWProductsResponse[]) => {
-    //             if(selectedCat==="All"){
-    //                 setproductItems(json); //Tuotteet kirjoitetaan productItems -array muuttujaan.
-    //             }
-    //             else{
-    //                 const filtered=json.filter(x=>x.categoryId===parseInt(selectedCat));
-    //                 setproductItems(filtered);
-    //             }
-    //             const fetchCount = Object.keys(json).length; //Lasketaan montako tuotenimikettä on yhteensä.
-    //             setproductItemsCount(fetchCount); //Kirjoitetaan tuotenimikkeiden määrä productItemsCount -muuttujaan.
-    //         })
-    //     setRefreshIndicator(false);
-    // }
 
 // --------------------------------------------------------------HAETAAN TUOTTEET---------------------
     async function GetProducts() {
@@ -112,16 +73,10 @@ export default function NWTuotteetListModular() {
         setCrudModal('none');
     }
   
-    //picker
-   
-
-    const categoriesList= categories.map((cat:INWCategories,index:any)=>{
-        return(<Picker.Item label={cat.categoryId.toString()+': '+cat.categoryName} value={cat.categoryId} key={index}/>)
-    });
-
-    function fetchFiltered(value:any){
+        function fetchFiltered(value:any){
         setSelectedCat(value);
         setRefreshProducts(!refreshProducts)
+        // setRefreshCategoriat(false);
     }
 
     return (
@@ -140,17 +95,8 @@ export default function NWTuotteetListModular() {
                 <ActivityIndicator size="small" color="#0000ff" animating={refreshIndicator} />
             </View>
 {/* --------------------------------------------------PICKER */}
-                <Picker
-                
-                    selectedValue={selectedCat}
-                    style={{height:50,width:250}}
-                        prompt='Valitse tuoteryhmä'
-                        onValueChange={(value) =>fetchFiltered(value)}
-                        >
-                    <Picker.Item label="Hae kaikki tuoteryhmät" value={0}/>
-                    {categoriesList}
-                </Picker>
-
+<CategoriesPicker selectedValue={selectedCat} refreshAfterPick={fetchFiltered} haeCategoriat={refreshCategoriat}/>
+             
 {/* -------------------------------------------------TUOTTEET */}
             <ScrollView>
                 {productItems.map((item: INWProductsResponse) => (

@@ -108,6 +108,16 @@ alert(prodCreateJson)
         setUnitPrice(newPrice)
     }
 
+    function shortIntValidation(val:string){
+        var regi=/^\d*\.?\d*$/g;
+
+        if((regi.test(val)&&0<parseInt(val)&&parseInt(val)<32767)||val==="")
+        {return true}
+        else{
+            alert('Invalid input! Only numbers seperated with "." as a decimal seperator are allowed.');
+            return false;
+        }
+    }
 
 
     function closeModal(){
@@ -154,7 +164,7 @@ return (
                 <Text style={styles.inputTitle}>Varastossa:</Text>
                 <TextInput style={styles.editInput}
                     underlineColorAndroid="transparent"
-                    onChangeText={val => {if((val.match("^[0-9]*$")&&0<parseInt(val)&&parseInt(val)<32767)||val===""){setUnitsInStock(val)}}}
+                    onChangeText={val => {shortIntValidation(val)==true ? setUnitsInStock(val):null}}
                     placeholderTextColor="#9a73ef"
                     autoCapitalize="none"
                     keyboardType='numeric'
@@ -165,7 +175,7 @@ return (
                 <Text style={styles.inputTitle}>Hälytysraja:</Text>
                 <TextInput style={styles.editInput}
                     underlineColorAndroid="transparent"
-                    onChangeText={val => {if((val.match("^[0-9]*$")&&0<parseInt(val)&&parseInt(val)<32767)||val===""){setReorderLevel(val)}}}
+                    onChangeText={val => {shortIntValidation(val)==true ? setReorderLevel(val):null}}
                     placeholderTextColor="#9a73ef"
                     autoCapitalize="none"
                     keyboardType='numeric'
@@ -175,7 +185,7 @@ return (
                 <Text style={styles.inputTitle}>Tilauksessa:</Text>
                 <TextInput style={styles.editInput}
                     underlineColorAndroid="transparent"
-                    onChangeText={val => {if((val.match("^[0-9]*$")&&0<parseInt(val)&&parseInt(val)<32767)||val===""){setUnitsOnOrder(val)}}}
+                    onChangeText={val => {shortIntValidation(val)==true ? setUnitsOnOrder(val):null}}
                     placeholderTextColor="#9a73ef"
                     autoCapitalize="none"
                     keyboardType='numeric'

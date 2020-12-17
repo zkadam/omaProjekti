@@ -14,7 +14,6 @@ import JsonList from './JsonList';
 import JsonListPressable from './JsonListPressable';
 import YLETekstiTV100 from './YLETekstiTV100';
 import YLETekstiTv from './YLETekstiTv';
-import NwTuotteetListPop from './NwTuotteet/NwTuotteetListPop';
 import NwTuotteetListModular from './NwTuotteet/NwTuotteetListModular';
 
 
@@ -57,7 +56,6 @@ export default function App() {
             <Tab.Screen name="JsonListPressable" component={JsonListPressable} options={{ tabBarIcon: ({ color , focused}) => <FontAwesome5 name="scroll" color={color} size={(focused? iconSize+5 : iconSize)} /> }} />
             <Tab.Screen name="YLETekstiTV100" component={YLETekstiTV100} options={{ tabBarIcon: ({ color , focused}) => <MaterialIcons name="chrome-reader-mode" color={color} size={(focused? iconSize+5 : iconSize)} /> }} />
             <Tab.Screen  name="YLETekstiTv" component={YLETekstiTv} options={{ tabBarIcon: ({ color , focused}) =><MaterialIcons name="chrome-reader-mode" size={(focused? iconSize+5 : iconSize)} color={color} />  }} />
-            <Tab.Screen  name="NwTuotteet" component={NwTuotteetListPop} options={{ tabBarIcon: ({ color , focused}) =><FontAwesome5 name="list" size={(focused? iconSize+5 : iconSize)} color={color} />  }} />
             <Tab.Screen  name="NWTuotteetListModular" component={NwTuotteetListModular} options={{ tabBarIcon: ({ color , focused}) =><FontAwesome5 name="list" size={(focused? iconSize+5 : iconSize)} color={color} />  }} />
 
         
