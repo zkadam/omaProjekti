@@ -47,7 +47,6 @@ export default function NWTuotteetListModular() {
     const [refreshProducts, setRefreshProducts] = useState(false);
     const [refreshIndicator, setRefreshIndicator] = useState(false);
     //picker
-    const[dropdownCategory, setDropdownCategory]=useState('All');
     const[categories, setCategories]=useState<any>([]);
     const[selectedCat, setSelectedCat]=useState<number>(0);
 
@@ -57,6 +56,7 @@ export default function NWTuotteetListModular() {
         GetProducts();
     }, [refreshProducts]);
 
+// --------------------------------------------------------------HAETAAN KATEGORIAT PICKERIIN---------------------
 
     async function GetCategories() {
         let uri = 'https://webapiharjoituskoodi2020.azurewebsites.net/nw/categories/';
@@ -87,8 +87,7 @@ export default function NWTuotteetListModular() {
     //     setRefreshIndicator(false);
     // }
 
-
-
+// --------------------------------------------------------------HAETAAN TUOTTEET---------------------
     async function GetProducts() {
         var uri = 'https://webapiharjoituskoodi2020.azurewebsites.net/nw/products/'
         if(selectedCat===0){uri = 'https://webapiharjoituskoodi2020.azurewebsites.net/nw/products/'}
@@ -104,9 +103,6 @@ export default function NWTuotteetListModular() {
         
     }
 
-
-
-
     function refreshJsonData() {
         setRefreshProducts(!refreshProducts);
         setRefreshIndicator(true);
@@ -120,7 +116,7 @@ export default function NWTuotteetListModular() {
    
 
     const categoriesList= categories.map((cat:INWCategories,index:any)=>{
-        return(<Picker.Item label={cat.categoryId.toString()+'. : '+cat.categoryName} value={cat.categoryId} key={index}/>)
+        return(<Picker.Item label={cat.categoryId.toString()+': '+cat.categoryName} value={cat.categoryId} key={index}/>)
     });
 
     function fetchFiltered(value:any){
@@ -154,6 +150,8 @@ export default function NWTuotteetListModular() {
                     <Picker.Item label="Hae kaikki tuoteryhmät" value={0}/>
                     {categoriesList}
                 </Picker>
+
+{/* -------------------------------------------------TUOTTEET */}
             <ScrollView>
                 {productItems.map((item: INWProductsResponse) => (
 
