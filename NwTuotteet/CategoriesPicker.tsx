@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import {Picker} from '@react-native-picker/picker';
-
-
 //filter interface
 interface INWCategories {
     //Typescript -interface käytetään productItems -muuttujassa json
@@ -12,18 +10,13 @@ interface INWCategories {
     picture:string
    
 }
-
-
-export default function NWTuotteetListModular(props:{selectedValue:any,refreshAfterPick:any,haeCategoriat:boolean}) {
+export default function NWTuotteetListModular(props:{selectedValue:any,refreshAfterPick:any,haeCategoriat:boolean, sender:string}) {
     //picker
     const[categories, setCategories]=useState<any>([]);
-
     useEffect(() => {
         GetCategories();
     }, [props.haeCategoriat]);
-
 // --------------------------------------------------------------HAETAAN KATEGORIAT PICKERIIN---------------------
-
     async function GetCategories() {
         let uri = 'https://webapiharjoituskoodi2020.azurewebsites.net/nw/categories/';
         await fetch(uri)
@@ -32,6 +25,7 @@ export default function NWTuotteetListModular(props:{selectedValue:any,refreshAf
                 setCategories(json); //Tuotteet kirjoitetaan productItems -array muuttujaan.
                  })
     }
+    const zeroCategory=(<Picker.Item label="Hae kaikki tuoteryhmät" value={0}/>)
     const categoriesList= categories.map((cat:INWCategories,index:any)=>{
         return(<Picker.Item label={cat.categoryId.toString()+': '+cat.categoryName} value={cat.categoryId} key={index}/>)
     });
@@ -42,10 +36,9 @@ export default function NWTuotteetListModular(props:{selectedValue:any,refreshAf
                         prompt='Valitse tuoteryhmä'
                         onValueChange={(value) =>props.refreshAfterPick(value)}
                         >
-                    <Picker.Item label="Hae kaikki tuoteryhmät" value={0}/>
+                    {props.sender==='list'? zeroCategory:null}                
                     {categoriesList}
                 </Picker>
-
 
     );
 }

@@ -6,7 +6,6 @@ import ProductDetails from './ProductDetails';
 import EditProduct from './EditProduct';
 import CreateProduct from './CreateProduct';
 import DeleteProduct from './DeleteProduct';
-import {Picker} from '@react-native-picker/picker';
 import CategoriesPicker from './CategoriesPicker'
 
 interface INWProductsResponse {
@@ -37,7 +36,6 @@ export default function NWTuotteetListModular() {
     const [refreshProducts, setRefreshProducts] = useState(false);
     const [refreshIndicator, setRefreshIndicator] = useState(false);
     //picker
-    const[categories, setCategories]=useState<any>([]);
     const[selectedCat, setSelectedCat]=useState<number>(0);
     const[refreshCategoriat, setRefreshCategoriat]=useState(true);
 
@@ -95,7 +93,7 @@ export default function NWTuotteetListModular() {
                 <ActivityIndicator size="small" color="#0000ff" animating={refreshIndicator} />
             </View>
 {/* --------------------------------------------------PICKER */}
-<CategoriesPicker selectedValue={selectedCat} refreshAfterPick={fetchFiltered} haeCategoriat={refreshCategoriat}/>
+            <CategoriesPicker selectedValue={selectedCat} refreshAfterPick={fetchFiltered} haeCategoriat={refreshCategoriat} sender={'list'}/>
              
 {/* -------------------------------------------------TUOTTEET */}
             <ScrollView>

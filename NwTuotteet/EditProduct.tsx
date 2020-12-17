@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Text, View,  Image,  ScrollView, Pressable,Platform,TextInput,Switch, TouchableHighlight,} from 'react-native';
 import {  Octicons } from '@expo/vector-icons'; //iconit käyttöön!
 import styles from '../styles/styles';
-import { color } from 'react-native-reanimated';
+import CategoriesPicker from './CategoriesPicker'
 
 
 interface INWProductsResponse {
@@ -249,15 +249,9 @@ return (
                 />
 
                 <Text style={styles.inputTitle}>Kategoria:</Text>
-                <TextInput style={styles.editInput}
-                    underlineColorAndroid="transparent"
-                    onChangeText={val => setCategoryId(val)}
-                    value={CategoryId.toString()||""}
-                    placeholderTextColor="#9a73ef"
-                    autoCapitalize="none"
-                    keyboardType='numeric'
-                    selectTextOnFocus={true}
-                />
+
+{/* -------------------------------------------------------picker */}
+                <CategoriesPicker selectedValue={CategoryId} refreshAfterPick={setCategoryId} haeCategoriat={true} sender={'edit'}/>
 
                 <Text style={styles.inputTitle}>Pakkauksen koko:</Text>
                 <TextInput style={styles.editInput}
