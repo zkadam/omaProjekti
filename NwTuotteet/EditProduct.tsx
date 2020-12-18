@@ -3,6 +3,7 @@ import { Text, View,  Image,  ScrollView, Pressable,Platform,TextInput,Switch, T
 import {  Octicons } from '@expo/vector-icons'; //iconit käyttöön!
 import styles from '../styles/styles';
 import CategoriesPicker from './CategoriesPicker'
+import SuppliersPicker from './SuppliersPicker'
 
 
 interface INWProductsResponse {
@@ -39,7 +40,9 @@ interface INWProductsResponse {
 
     useEffect(()=>{
         GetProductData();
-        }, [props.passProductId]);  //aina kun product id muuttuu, päivitetään useEffectin
+        }, [props.passProductId],);  //aina kun product id muuttuu, päivitetään useEffectin
+
+
 
     //Tuotetietojen haku id:llä tietokannasta
     async function GetProductData() {
@@ -169,6 +172,9 @@ interface INWProductsResponse {
     function closeModal(){
         props.closeModal(true);
     }
+
+    const pickerFunct=()=>{return(<CategoriesPicker selectedValue={parseInt(CategoryId)} refreshAfterPick={setCategoryId} haeCategoriat={false} sender={'edit'}/>
+    )}
  
 
 {/* Modal starts here */}
@@ -251,29 +257,12 @@ return (
                 <Text style={styles.inputTitle}>Kategoria:</Text>
 
 {/* -------------------------------------------------------picker */}
-                <CategoriesPicker selectedValue={CategoryId} refreshAfterPick={setCategoryId} haeCategoriat={true} sender={'edit'}/>
-
-                <Text style={styles.inputTitle}>Pakkauksen koko:</Text>
-                <TextInput style={styles.editInput}
-                    underlineColorAndroid="transparent"
-                    onChangeText={val => setQuantityPerUnit(val)}
-                    value={QuantityPerUnit||""}
-                    placeholderTextColor="#9a73ef"
-                    autoCapitalize="none"
-                    selectTextOnFocus={true}
-                />
+                {pickerFunct()}
+              
 
                 <Text style={styles.inputTitle}>Tavarantoimittaja:</Text>
-                <TextInput style={styles.editInput}
-                    underlineColorAndroid="transparent"
-                    onChangeText={val => setSupplierId(val)}
-                    value={SupplierId.toString()||""}
-                    placeholderTextColor="#9a73ef"
-                    autoCapitalize="none"
-                    keyboardType='numeric'
-                    selectTextOnFocus={true}
-                />
-
+                {/* -------------------------------------------------------picker */}
+                <SuppliersPicker selectedValue={parseInt(SupplierId)} refreshAfterPick={setSupplierId} haeSupplierit={false} sender={'edit'}/>
                 <Text style={styles.inputTitle}>Tuote poistunut:</Text>
                 <View style={{ flexDirection: 'row', marginLeft: 15, }}>
                     <Text style={{ marginRight: 4, }}>Ei</Text>

@@ -37,7 +37,6 @@ export default function NWTuotteetListModular() {
     const [refreshIndicator, setRefreshIndicator] = useState(false);
     //picker
     const[selectedCat, setSelectedCat]=useState<number>(0);
-    const[refreshCategoriat, setRefreshCategoriat]=useState(true);
 
 
     useEffect(() => {
@@ -93,7 +92,7 @@ export default function NWTuotteetListModular() {
                 <ActivityIndicator size="small" color="#0000ff" animating={refreshIndicator} />
             </View>
 {/* --------------------------------------------------PICKER */}
-            <CategoriesPicker selectedValue={selectedCat} refreshAfterPick={fetchFiltered} haeCategoriat={refreshCategoriat} sender={'list'}/>
+            <CategoriesPicker selectedValue={selectedCat} refreshAfterPick={fetchFiltered} haeCategoriat={false} sender={'list'}/>
              
 {/* -------------------------------------------------TUOTTEET */}
             <ScrollView>

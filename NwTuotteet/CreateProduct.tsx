@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Text, View,  Image,  ScrollView, Pressable,Platform,TextInput,Switch, TouchableHighlight,} from 'react-native';
 import {  Octicons } from '@expo/vector-icons'; //iconit käyttöön!
 import styles from '../styles/styles';
-import CategoriesPicker from './CategoriesPicker'
+import CategoriesPicker from './CategoriesPicker';
+import SuppliersPicker from './SuppliersPicker'
 
 
 
@@ -195,7 +196,7 @@ return (
 
                 <Text style={styles.inputTitle}>Kategoria:</Text>
                {/* -------------------------------------------------------picker */}
-               <CategoriesPicker selectedValue={CategoryId} refreshAfterPick={setCategoryId} haeCategoriat={true} sender={'edit'}/>
+               <CategoriesPicker selectedValue={null} refreshAfterPick={setCategoryId} haeCategoriat={false} sender={'create'}/>
 
 
                 <Text style={styles.inputTitle}>Pakkauksen koko:</Text>
@@ -208,14 +209,7 @@ return (
                 />
 
                 <Text style={styles.inputTitle}>Tavarantoimittaja:</Text>
-                <TextInput style={styles.editInput}
-                    underlineColorAndroid="transparent"
-                    onChangeText={val => setSupplierId(val)}
-                    placeholderTextColor="#9a73ef"
-                    autoCapitalize="none"
-                    keyboardType='numeric'
-                    selectTextOnFocus={true}
-                />
+                <SuppliersPicker selectedValue={null} refreshAfterPick={setSupplierId} haeSupplierit={false} sender={'create'}/>
 
                 <Text style={styles.inputTitle}>Tuote poistunut:</Text>
                 <View style={{ flexDirection: 'row', marginLeft: 15, }}>
